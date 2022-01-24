@@ -2,7 +2,7 @@
 #entry string
 #right hand rotor rotates
 #plugboard swap for 10 pairs
-#enter through entry wheel
+#enter through entry wheel, military version did 1-1 but it is important for the entry into the wheels.
 #pass through 3 rotors
 #hit reflector scramble again.
 #pass back through three rotors
@@ -30,6 +30,7 @@ def build_rotor_pairs(rotor = 1):
     dct_rotor_pairs = dict(zip(keys, values))
     
     return(dct_rotor_pairs)
+
     
 class enigma_rotor:
     def __init__(self, position, rotor_num):
