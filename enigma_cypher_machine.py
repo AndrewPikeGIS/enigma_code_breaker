@@ -33,13 +33,42 @@ def build_rotor_pairs(rotor = 1):
 
     
 class enigma_rotor:
-    def __init__(self, position, rotor_num):
-        self.position = position
+    def __init__(self, rotor_position, starting_position):
+        
+        self.rotor_position = rotor_position
 
-        self.rotor_pairs = build_rotor_pairs(rotor_num)
+        self.rotor_pairs = {}
+        
+        self.starting_position = starting_position
+        
+    def build_rotor_pairs(self, rotor = 1):
+        keys = []
+        values = []
+        
+        letters = string.ascii_lowercase
+        pair = letters
+        
+        random.seed = rotor
+        
+        for x in range(26):
+            keys.append(letters[x])
+            pair = pair.replace(letters[x], "")
+            for val in values:
+                pair = pair.replace(val, "")
+            values.append(pair[random.randint(0,len(pair)-1)])
+            pair = letters
+        
+        self.rotor_pairs = dict(zip(keys, values))
+        
+    def get_rotor_pairs(self):
+        return(self.__rotor_pairs)
 
-test = enigma_rotor('right', build_rotor_pairs(1))
 
-print(test.position)
 
-print(test.rotor_pairs)
+test = enigma_rotor('right', 1)
+
+print(test.rotor_position)
+
+test.build_rotor_pairs(1)
+
+print(test.rotor_pairs.values())
