@@ -10,6 +10,8 @@
 
 import random, string
 
+
+#need to fix the random component so that it is repeatable.
     
 class enigma_rotor:
     def __init__(self, rotor_position, starting_position, rotor_seed):
@@ -61,7 +63,7 @@ class enigma_rotor:
 #return the coded value.
 
 class enigma_machine:
-    def __init__(self, rotor1_start, rotor2_start, rotor3_start, reflector, plug_board) :
+    def __init__(self, rotor1_start, rotor2_start, rotor3_start) :
         
         self.rotor_1 = enigma_rotor(rotor_position = 1, starting_position = rotor1_start, rotor_seed= 1)
         
@@ -70,16 +72,16 @@ class enigma_machine:
         self.rotor_3 = enigma_rotor(rotor_position = 3, starting_position = rotor3_start, rotor_seed= 3)
         
 
+test_rotor = enigma_rotor(rotor_position = 1 , starting_position = 1, rotor_seed = 1)
 
+test_rotor2 = enigma_rotor(rotor_position = 1 , starting_position = 1, rotor_seed = 1)
 
-test = enigma_rotor(rotor_position = 1 , starting_position = 1, rotor_seed = 1)
+print(test_rotor.rotor_position)
 
-print(test.rotor_position)
+print(test_rotor.rotor_pairs)
 
-print(test.starting_position)
+print(test_rotor2.rotor_pairs)
 
-test.rotate_rotor()
+test_enigma = enigma_machine(1, 2, 3)
 
-print(test.starting_position)
-
-print(test.rotor_pairs)
+#print(test_enigma.rotor_1.rotor_pairs)
