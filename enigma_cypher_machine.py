@@ -54,15 +54,16 @@ class enigma_rotor:
         if self.starting_position > 26:
             self.starting_position = 0
 
+#fix this so that all combinations are included but only the edits are different
 class enigma_plug_board:
-    def __init__(self, plug_board):
-        self.plug_board = {}
+    def __init__(self, plug_board_pairs):
+        self.plug_board_pairs = {}
         
-        self.set_plug_board(plug_board)
+        self.set_plug_board(plug_board_pairs)
     
     def set_plug_board(self, plug_board_pairs):
-        if len(plug_board_pairs.keys())<10:
-            self.plug_board = plug_board_pairs
+        if len(plug_board_pairs.keys()) <= 10:
+            self.plug_board_pairs = plug_board_pairs
         else:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
@@ -90,7 +91,9 @@ class enigma_machine:
         self.reflector = enigma_rotor(rotor_position = 5, starting_position = 1, rotor_seed = 5)
         
         self.plug_board = enigma_plug_board(plug_board)
-    
+
+
+
 plug_board = {
     "a" : "j",
     "g" : "k",
@@ -102,10 +105,8 @@ plug_board = {
     "o" : "r",
     "y" : "e",
     "n" : "g"
-}       
+}    
 
 test_enigma = enigma_machine(1, 2, 3, plug_board)
 
-print(test_enigma.rotor_1.rotor_pairs)
-
-print(test_enigma.plug_board.plug_board)
+print(test_enigma.plug_board.plug_board_pairs)
