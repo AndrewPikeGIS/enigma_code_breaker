@@ -31,7 +31,9 @@ class enigma_rotor:
         letters = string.ascii_lowercase
         pair = letters
         
-        random.seed = rotor
+        random.seed(rotor) 
+        
+        #this doesn't work consistently
         
         for x in range(26):
             keys.append(letters[x])
@@ -70,6 +72,8 @@ class enigma_machine:
         self.rotor_2 = enigma_rotor(rotor_position = 2, starting_position = rotor2_start, rotor_seed= 2)
         
         self.rotor_3 = enigma_rotor(rotor_position = 3, starting_position = rotor3_start, rotor_seed= 3)
+        
+        self.reflector = enigma_rotor(rotor_position = 5, starting_position = 1, rotor_seed = 5)
         
 
 test_rotor = enigma_rotor(rotor_position = 1 , starting_position = 1, rotor_seed = 1)
