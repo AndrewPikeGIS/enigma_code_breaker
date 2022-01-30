@@ -54,6 +54,18 @@ class enigma_rotor:
         if self.starting_position > 26:
             self.starting_position = 0
 
+class enigma_plug_board:
+    def __init__(self):
+        self.plug_board = {}
+    
+    def set_plug_board(self, plug_board_pairs):
+        if len(plug_board_pairs.keys())<10:
+            self.plug_board = plug_board_pairs
+        else:
+            print("MAXIMUM 10 PLUG BOARD SWITCHES")
+            print("Call .set_plug_board() to try again.")
+      
+
 #for enigma class 
 #string comes in, process one letter at a time.
 #build three rotors, position right, left, center
