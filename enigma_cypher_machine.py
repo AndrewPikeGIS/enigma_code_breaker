@@ -55,8 +55,10 @@ class enigma_rotor:
             self.starting_position = 0
 
 class enigma_plug_board:
-    def __init__(self):
+    def __init__(self, plug_board):
         self.plug_board = {}
+        
+        self.set_plug_board(plug_board)
     
     def set_plug_board(self, plug_board_pairs):
         if len(plug_board_pairs.keys())<10:
@@ -77,7 +79,7 @@ class enigma_plug_board:
 #return the coded value.
 
 class enigma_machine:
-    def __init__(self, rotor1_start, rotor2_start, rotor3_start) :
+    def __init__(self, rotor1_start, rotor2_start, rotor3_start, plug_board) :
         
         self.rotor_1 = enigma_rotor(rotor_position = 1, starting_position = rotor1_start, rotor_seed= 1)
         
@@ -87,17 +89,23 @@ class enigma_machine:
         
         self.reflector = enigma_rotor(rotor_position = 5, starting_position = 1, rotor_seed = 5)
         
+        self.plug_board = enigma_plug_board(plug_board)
+    
+plug_board = {
+    "a" : "j",
+    "g" : "k",
+    "d" : "b",
+    "t" : "f",
+    "e" : "w",
+    "h" : "a",
+    "p" : "c",
+    "o" : "r",
+    "y" : "e",
+    "n" : "g"
+}       
 
-test_rotor = enigma_rotor(rotor_position = 1 , starting_position = 1, rotor_seed = 1)
+test_enigma = enigma_machine(1, 2, 3, plug_board)
 
-test_rotor2 = enigma_rotor(rotor_position = 1 , starting_position = 1, rotor_seed = 1)
+print(test_enigma.rotor_1.rotor_pairs)
 
-print(test_rotor.rotor_position)
-
-print(test_rotor.rotor_pairs)
-
-print(test_rotor2.rotor_pairs)
-
-test_enigma = enigma_machine(1, 2, 3)
-
-#print(test_enigma.rotor_1.rotor_pairs)
+print(test_enigma.plug_board.plug_board)
