@@ -74,18 +74,6 @@ class enigma_rotor:
         else:
             self.step_position = 17
         
-        
-            
-
-#for enigma class 
-#string comes in, process one letter at a time.
-#build three rotors, position right, left, center
-#pass letter in to plug board, swap 10 pairs
-#pass current letter into rotor 1
-#pass letter to remaining rotor 2, 3, and reflector
-#pas back through rotors 3,2,1
-#pass back through plug board
-#return the coded value.
 
 #initialize machine
 #rotate rotor 1, if position = rotate for rotor 2 then rotate, if position = rotate for rotor 3 then rotate
@@ -122,8 +110,18 @@ class enigma_machine:
         else:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
-      
-
+            
+    def encrypt_string(self, input_string):
+        if input_string[-4:] == ".txt":
+            with open(input_string, r) as txt_in:
+                text = txt_in.read()
+                for letter in text:
+                    #run the encryption methods
+                    pass
+        else:
+            for letter in input_string:
+                #run the encryption methods      
+                pass
     
 
 plug_board = {
