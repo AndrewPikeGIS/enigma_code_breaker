@@ -54,21 +54,6 @@ class enigma_rotor:
         if self.starting_position > 26:
             self.starting_position = 0
 
-#fix this so that all combinations are included but only the edits are different
-class enigma_plug_board:
-    def __init__(self, plug_board_pairs):
-        self.plug_board_pairs = {}
-        
-        self.set_plug_board(plug_board_pairs)
-    
-    def set_plug_board(self, plug_board_pairs):
-        if len(plug_board_pairs.keys()) <= 10:
-            self.plug_board_pairs = plug_board_pairs
-        else:
-            print("MAXIMUM 10 PLUG BOARD SWITCHES")
-            print("Call .set_plug_board() to try again.")
-      
-
 #for enigma class 
 #string comes in, process one letter at a time.
 #build three rotors, position right, left, center
@@ -78,6 +63,21 @@ class enigma_plug_board:
 #pas back through rotors 3,2,1
 #pass back through plug board
 #return the coded value.
+
+#initialize machine
+#rotate rotor 1, if position = rotate for rotor 2 then rotate, if position = rotate for rotor 3 then rotate
+#pull string one by one into plug board, change if found in keys
+#pass letter into associated index position of rotor 1 pass value out, 
+#pass letter into associated index position of rotor 2 pass value out
+#pass letter into associated index position of rotor 3 pass value out
+#pass letter into associated index position of reflector pass value out.
+#pass letter into associated index position of rotor 3 pass value out.
+#pass letter into associated index position of rotor 2 pass value out
+#pass letter into associated index position of rotor 1 pass value out
+#pass letter back through plug board
+#print to text or user.
+
+
 
 class enigma_machine:
     def __init__(self, rotor1_start, rotor2_start, rotor3_start, plug_board) :
@@ -90,9 +90,19 @@ class enigma_machine:
         
         self.reflector = enigma_rotor(rotor_position = 5, starting_position = 1, rotor_seed = 5)
         
-        self.plug_board = enigma_plug_board(plug_board)
+        self.plug_board_pairs = {}
+        
+        self.set_plug_board(plug_board_pairs)
+    
+    def set_plug_board(self, plug_board_pairs):
+        if len(plug_board_pairs.keys()) <= 10:
+            self.plug_board_pairs = plug_board_pairs
+        else:
+            print("MAXIMUM 10 PLUG BOARD SWITCHES")
+            print("Call .set_plug_board() to try again.")
+      
 
-
+    
 
 plug_board = {
     "a" : "j",
