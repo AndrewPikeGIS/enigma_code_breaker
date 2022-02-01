@@ -8,6 +8,7 @@
 #pass back through three rotors
 #plug board swap for 10 same 10 pairs
 
+from doctest import testfile
 import random, string
 
 
@@ -22,7 +23,7 @@ class enigma_rotor:
         
         self.build_rotor_pairs(rotor = rotor_seed)
         
-        self.starting_position = starting_position
+        self.position = starting_position
         
         self.step_position = 0
         
@@ -57,10 +58,10 @@ class enigma_rotor:
         return(self.__rotor_pairs)
     
     def rotate_rotor(self):
-        self.starting_position += 1
+        self.position += 1
         
-        if self.starting_position > 26:
-            self.starting_position = 0
+        if self.position > 26:
+            self.position = 0
         
     def set_step_position(self, rotor_seed):
         if rotor_seed >= 5 or rotor_seed < 1:
@@ -75,18 +76,6 @@ class enigma_rotor:
             self.step_position = 17
         
 
-#initialize machine
-#rotate rotor 1, if position = rotate for rotor 2 then rotate, if position = rotate for rotor 3 then rotate
-#pull string one by one into plug board, change if found in keys
-#pass letter into associated index position of rotor 1 pass value out, 
-#pass letter into associated index position of rotor 2 pass value out
-#pass letter into associated index position of rotor 3 pass value out
-#pass letter into associated index position of reflector pass value out.
-#pass letter into associated index position of rotor 3 pass value out.
-#pass letter into associated index position of rotor 2 pass value out
-#pass letter into associated index position of rotor 1 pass value out
-#pass letter back through plug board
-#print to text or user.
 
 
 class enigma_machine:
@@ -102,7 +91,7 @@ class enigma_machine:
         
         self.plug_board_pairs = {}
         
-        self.set_plug_board(plug_board_pairs)
+        self.set_plug_board(plug_board)
     
     def set_plug_board(self, plug_board_pairs):
         if len(plug_board_pairs.keys()) <= 10:
@@ -111,18 +100,38 @@ class enigma_machine:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
             
-    def encrypt_string(self, input_string):
+    def parse_string(self, input_string):
         if input_string[-4:] == ".txt":
-            with open(input_string, r) as txt_in:
+            with open(input_string, "r") as txt_in:
                 text = txt_in.read()
                 for letter in text:
                     #run the encryption methods
-                    pass
+                    self.encrypt_string(letter)
         else:
             for letter in input_string:
                 #run the encryption methods      
-                pass
+                self.encrypt_string(letter)
     
+    def encrypt_string(self, string_in):
+        #rotate rotors
+        self.rotor_1.rotate_rotor()
+        
+        if self.rotor_1.step_position == self.rotor_1.position:
+            print("rotate")
+    
+#initialize machine
+#rotate rotor 1, if position = rotate for rotor 2 then rotate, if position = rotate for rotor 3 then rotate
+#pull string one by one into plug board, change if found in keys
+#pass letter into associated index position of rotor 1 pass value out, 
+#pass letter into associated index position of rotor 2 pass value out
+#pass letter into associated index position of rotor 3 pass value out
+#pass letter into associated index position of reflector pass value out.
+#pass letter into associated index position of rotor 3 pass value out.
+#pass letter into associated index position of rotor 2 pass value out
+#pass letter into associated index position of rotor 1 pass value out
+#pass letter back through plug board
+#print to text or user.
+
 
 plug_board = {
     "a" : "j",
@@ -139,4 +148,8 @@ plug_board = {
 
 test_enigma = enigma_machine(1, 2, 3, plug_board)
 
-print(test_enigma.plug_board.plug_board_pairs)
+print(test_enigma.rotor_1.position)
+
+test_enigma.rotor_1.rotate_rotor()
+
+print(test_enigma.rotor_1.position)
