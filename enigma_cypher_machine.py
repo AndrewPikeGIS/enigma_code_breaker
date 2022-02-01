@@ -60,7 +60,20 @@ class enigma_rotor:
         if self.starting_position > 26:
             self.starting_position = 0
         
-    def set_step_position(self, rotor_seed)
+    def set_step_position(self, rotor_seed):
+        if rotor_seed >= 5 or rotor_seed < 1:
+            self.step_position = 1
+        elif rotor_seed == 4:
+            self.step_position = 10
+        elif rotor_seed == 3:
+            self.step_position = 22
+        elif rotor_seed == 2:
+            self.step_position = 5
+        else:
+            self.step_position = 17
+        
+        
+            
 
 #for enigma class 
 #string comes in, process one letter at a time.
