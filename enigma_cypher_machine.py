@@ -26,6 +26,8 @@ class enigma_rotor:
         
         self.step_position = 0
         
+        self.set_step_position(rotor_seed = rotor_seed)
+        
         
     def build_rotor_pairs(self, rotor = 1):
         keys = []
