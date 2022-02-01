@@ -24,12 +24,18 @@ class enigma_rotor:
         
         self.starting_position = starting_position
         
+        self.step_position = 0
+        
+        
     def build_rotor_pairs(self, rotor = 1):
         keys = []
         values = []
         
         letters = string.ascii_lowercase
         pair = letters
+        
+        if rotor > 5 or rotor < 1:
+            rotor = 5
         
         random.seed(rotor) 
         
@@ -53,6 +59,8 @@ class enigma_rotor:
         
         if self.starting_position > 26:
             self.starting_position = 0
+        
+    def set_step_position(self, rotor_seed)
 
 #for enigma class 
 #string comes in, process one letter at a time.
@@ -76,7 +84,6 @@ class enigma_rotor:
 #pass letter into associated index position of rotor 1 pass value out
 #pass letter back through plug board
 #print to text or user.
-
 
 
 class enigma_machine:
