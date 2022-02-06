@@ -117,7 +117,7 @@ class EnigmaMachine:
                 #run the encryption methods      
                 self.encrypt_string(letter)
     
-    def rotor_encryption(self, char_in, rotor_in):
+    def rotor_encryption_forward(self, char_in, rotor_in):
         letters = string.ascii_lowercase
         #get index positon of char_in
         index_in = letters.index(char_in)
@@ -151,7 +151,39 @@ class EnigmaMachine:
         print("char_out: " + char_out)
         return(char_out)
         
+    def rotor_encryption_backward(self, char_in, rotor_in):
+        letters = string.ascii_lowercase
+        #get index positon of char_in
+        index_in = letters.index(char_in)
         
+        if rotor_in == 1:
+            rotor_index = self.rotor_1.position
+            rotor_pairs = self.rotor_1.rotor_pairs
+        elif rotor_in == 2:
+            rotor_index = self.rotor_2.position
+            rotor_pairs = self.rotor_2.rotor_pairs
+        elif rotor_in == 3:
+            rotor_index = self.rotor_3.position
+            rotor_pairs = self.rotor_3.rotor_pairs
+        else:
+            rotor_index = 0
+            rotor_pairs = self.reflector.rotor_pairs
+            
+        position_in_rotor =  rotor_index + index_in
+        
+        if position_in_rotor >= 26:
+            position_in_rotor -= 26
+            
+        char_in_rotor = list(rotor_pairs.values())[position_in_rotor]
+        
+        char_out = rotor_pairs[char_in_rotor]
+        
+        print("index: " + str(rotor_index))
+        print("char_index: " + str(index_in))
+        print("index read: " + str(position_in_rotor))
+        print("char in to rotor: " + char_in_rotor)
+        print("char_out: " + char_out)
+        return(char_out)
     
     def encrypt_string(self, string_in):
         
@@ -159,6 +191,7 @@ class EnigmaMachine:
             print("String length greater than 1 running through parse_string()")
             self.parse_string(string_in)
         else:
+            print(string_in)
             #rotate rotors
             self.rotor_1.rotate_rotor()
             
@@ -176,24 +209,36 @@ class EnigmaMachine:
             if string_in in self.plug_board_pairs.keys():
                 string_in = self.plug_board_pairs[string_in]
             
-            print("plug_board: " + string_in)
+            print("string in: " + string_in)
             
             #run current char through rotor 1
-            char_rotor1_out = self.rotor_encryption(string_in, 1)
+            print("rotor1")
+            char_rotor1_out = self.rotor_encryption_forward(string_in, 1)
             
             #run current char through rotor 2
-            char_rotor2_out = self.rotor_encryption(char_rotor1_out, 2)
+            print("rotor 2")
+            char_rotor2_out = self.rotor_encryption_forward(char_rotor1_out, 2)
             
             #run current char through rotor 3
-            char_rotor3_out = self.rotor_encryption(char_rotor2_out, 3)
+            print("rotor 3")
+            char_rotor3_out = self.rotor_encryption_forward(char_rotor2_out, 3)
             
             #run current char through reflector
+            print("reflector")
+            char_reflector_out = self.rotor_encryption_forward(char_rotor3_out, 4)
             
-            char_reflector_out = self.rotor_encryption(char_rotor3_out, 4)
+            #pass back through rotors 3
+            print("rotor 3")
+            char_rotor3_b_out = self.rotor_encryption_backward(char_reflector_out, 3)
             
-            #pass back through rotors 3-2-1
+            #pass back through rotor 2
+            char_rotor2_b_out = self.rotor_encryption_backward(char_rotor3_b_out, 2)
             
-        
+            #pass back through rotor 1
+            char_rotor1_b_out = self.rotor_encryption_backward(char_rotor2_b_out, 1)
+            
+            #pass back through plug board
+            
     
 #initialize machine
  
@@ -221,7 +266,7 @@ plug_board = {
 
 test_enigma = EnigmaMachine(1, 2, 3, plug_board)
 
-test_string = "t"
+test_string = "test"
 
 test_enigma.encrypt_string(test_string)
 
