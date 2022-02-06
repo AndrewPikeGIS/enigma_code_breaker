@@ -17,16 +17,22 @@ import random, string
 class enigma_rotor:
     def __init__(self, rotor_position, starting_position, rotor_seed):
         
+        #position of rotor in enigma machine.
         self.rotor_position = rotor_position
 
+        #rotor pairs
         self.rotor_pairs = {}
         
+        #builds rotor pairs
         self.build_rotor_pairs(rotor = rotor_seed)
         
+        #starting position for the rotor
         self.position = starting_position
         
+        #position where the rotor will force the neighboring rotor to rotate
         self.step_position = 0
         
+        #sets the rotor positon based on the rotor seed.
         self.set_step_position(rotor_seed = rotor_seed)
         
         
@@ -117,7 +123,7 @@ class enigma_machine:
         self.rotor_1.rotate_rotor()
         
         if self.rotor_1.step_position == self.rotor_1.position:
-            print("rotate")
+            self.rotor_2.rotate_rotor()
     
 #initialize machine
 #rotate rotor 1, if position = rotate for rotor 2 then rotate, if position = rotate for rotor 3 then rotate
