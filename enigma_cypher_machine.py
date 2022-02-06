@@ -128,9 +128,28 @@ class EnigmaMachine:
         elif rotor_in == 2:
             rotor_index = self.rotor_2.position
             rotor_pairs = self.rotor_2.rotor_pairs
-        else:
+        elif rotor_in == 3:
             rotor_index = self.rotor_3.position
             rotor_pairs = self.rotor_3.rotor_pairs
+        else:
+            rotor_index = 0
+            rotor_pairs = self.reflector.rotor_pairs
+            
+        position_in_rotor =  rotor_index + index_in
+        
+        if position_in_rotor >= 26:
+            position_in_rotor -= 26
+            
+        char_in_rotor = list(rotor_pairs.keys())[position_in_rotor]
+        
+        char_out = rotor_pairs[char_in_rotor]
+        
+        print("index: " + str(rotor_index))
+        print("char_index: " + str(index_in))
+        print("index read: " + str(position_in_rotor))
+        print("char in to rotor: " + char_in_rotor)
+        print("char_out: " + char_out)
+        return(char_out)
         
         
     
@@ -157,19 +176,28 @@ class EnigmaMachine:
             if string_in in self.plug_board_pairs.keys():
                 string_in = self.plug_board_pairs[string_in]
             
-            print(string_in)
+            print("plug_board: " + string_in)
             
             #run current char through rotor 1
+            char_rotor1_out = self.rotor_encryption(string_in, 1)
             
+            #run current char through rotor 2
+            char_rotor2_out = self.rotor_encryption(char_rotor1_out, 2)
+            
+            #run current char through rotor 3
+            char_rotor3_out = self.rotor_encryption(char_rotor2_out, 3)
+            
+            #run current char through reflector
+            
+            char_reflector_out = self.rotor_encryption(char_rotor3_out, 4)
+            
+            #pass back through rotors 3-2-1
             
         
     
 #initialize machine
  
 
-#pass letter into associated index position of rotor 1 pass value out, 
-#pass letter into associated index position of rotor 2 pass value out
-#pass letter into associated index position of rotor 3 pass value out
 #pass letter into associated index position of reflector pass value out.
 #pass letter into associated index position of rotor 3 pass value out.
 #pass letter into associated index position of rotor 2 pass value out
@@ -193,10 +221,8 @@ plug_board = {
 
 test_enigma = EnigmaMachine(1, 2, 3, plug_board)
 
-test_string = "test"
+test_string = "t"
 
 test_enigma.encrypt_string(test_string)
 
-print(test_enigma.rotor_1.position)
-
-#print(test_enigma.rotor_1.rotor_pairs)
+print(test_enigma.rotor_1.rotor_pairs)
