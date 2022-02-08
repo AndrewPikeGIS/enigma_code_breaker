@@ -219,7 +219,7 @@ class EnigmaMachine:
             # print(self.rotor_1.position)
             # print(self.rotor_2.position)
             # print(self.rotor_3.position)
-            # print(" ")
+            #print(" ")
 
             # run current char through plugboard
             if string_in in self.plug_board_pairs.keys():
@@ -280,7 +280,7 @@ plug_board = {
     "n": "g"
 }
 
-test_enigma = EnigmaMachine(1, 2, 3, plug_board)
+test_enigma = EnigmaMachine(10, 2, 3, plug_board)
 
 test_string = "test string"
 
