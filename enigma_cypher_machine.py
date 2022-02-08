@@ -236,7 +236,6 @@ class EnigmaMachine:
             #pass back through rotor 1
             char_rotor1_b_out = self.rotor_encryption_backward(char_rotor2_b_out, 1)
 
-            
             #pass back through plug board
             if char_rotor1_b_out in self.plug_board_pairs.values():
                 vals = list(self.plug_board_pairs.values())
@@ -253,15 +252,6 @@ class EnigmaMachine:
         print("Encrypted string: " + self.encrypted_string)
     
     
- 
-
-#pass letter into associated index position of reflector pass value out.
-#pass letter into associated index position of rotor 3 pass value out.
-#pass letter into associated index position of rotor 2 pass value out
-#pass letter into associated index position of rotor 1 pass value out
-#pass letter back through plug board
-#print to text or user.
-
 
 plug_board = {
     "a" : "j",
