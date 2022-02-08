@@ -95,6 +95,10 @@ class EnigmaMachine:
         
         self.plug_board_pairs = {}
         
+        self.encrypted_string = ""
+        
+        self.string_in = ""
+        
         self.set_plug_board(plug_board)
     
     def set_plug_board(self, plug_board_pairs):
@@ -106,16 +110,22 @@ class EnigmaMachine:
             
     def parse_string(self, input_string):
 
+        self.string_in = input_string
+        
         if input_string[-4:] == ".txt":
             with open(input_string, "r") as txt_in:
                 text = txt_in.read()
                 for letter in text:
                     #run the encryption methods
-                    self.encrypt_string(letter)
+                    string_out = self.encrypt_string(letter)
+                    self.encrypted_string += string_out
         else:
             for letter in input_string:
                 #run the encryption methods      
-                self.encrypt_string(letter)
+                string_out = self.encrypt_string(letter)
+                self.encrypted_string += string_out
+                
+        
     
     def rotor_encryption_forward(self, char_in, rotor_in):
         letters = string.ascii_lowercase
@@ -181,7 +191,7 @@ class EnigmaMachine:
             print("String length greater than 1 running through parse_string()")
             self.parse_string(string_in)
         else:
-            print(string_in)
+            
             #rotate rotors
             self.rotor_1.rotate_rotor()
             
@@ -192,43 +202,33 @@ class EnigmaMachine:
             #if position = rotate for rotor 2 then rotate 3
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
-                
-            #start processing string
-            print(string_in)
+
             
             #run current char through plugboard
             if string_in in self.plug_board_pairs.keys():
                 string_in = self.plug_board_pairs[string_in]
-                
-            print("plugboard out: " + string_in)
             
             #run current char through rotor 1
             char_rotor1_out = self.rotor_encryption_forward(string_in, 1)
-            print("rotor1: " + char_rotor1_out)
             
             #run current char through rotor 2
             char_rotor2_out = self.rotor_encryption_forward(char_rotor1_out, 2)
-            print("rotor 2: " + char_rotor2_out)
             
             #run current char through rotor 3
             char_rotor3_out = self.rotor_encryption_forward(char_rotor2_out, 3)
-            print("rotor 3: " + char_rotor3_out)
             
             #run current char through reflector
             char_reflector_out = self.rotor_encryption_forward(char_rotor3_out, 4)
-            print("reflector: " + char_reflector_out)
             
             #pass back through rotors 3
             char_rotor3_b_out = self.rotor_encryption_backward(char_reflector_out, 3)
-            print("rotor 3: " + char_rotor3_b_out)
             
             #pass back through rotor 2
             char_rotor2_b_out = self.rotor_encryption_backward(char_rotor3_b_out, 2)
-            print("rotor 2: " + char_rotor2_b_out)
             
             #pass back through rotor 1
             char_rotor1_b_out = self.rotor_encryption_backward(char_rotor2_b_out, 1)
-            print("rotor 1: " + char_rotor1_b_out)
+
             
             #pass back through plug board
             if char_rotor1_b_out in self.plug_board_pairs.values():
@@ -236,8 +236,6 @@ class EnigmaMachine:
                 string_out = list(self.plug_board_pairs)[vals.index(char_rotor1_b_out)]
             else:
                 string_out = string_in
-            
-            print("string out: " + string_out)
             
             return(string_out)            
     
@@ -272,4 +270,6 @@ test_string = "test"
 
 test_enigma.encrypt_string(test_string)
 
-#print(test_enigma.rotor_1.rotor_pairs)
+print(test_enigma.encrypted_string)
+
+print()
