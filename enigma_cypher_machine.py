@@ -108,9 +108,14 @@ class EnigmaMachine:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
             
-    def parse_string(self, input_string):
-
-        self.string_in = input_string
+    def parse_string(self, input_string = ""):
+        
+        if input_string != "":
+            self.string_in = input_string
+        else:
+            input_string = self.string_in
+        
+        self.encrypted_string = ""
         
         if input_string[-4:] == ".txt":
             with open(input_string, "r") as txt_in:
@@ -185,7 +190,9 @@ class EnigmaMachine:
         
         return(char_out)
     
-    def encrypt_string(self, string_in):
+    def encrypt_string(self, string_in = ""):
+        if string_in == "":
+            string_in = self.string_in
         
         if len(string_in) > 1:
             print("String length greater than 1 running through parse_string()")
@@ -239,6 +246,11 @@ class EnigmaMachine:
             
             return(string_out)            
     
+    def print_string_in(self):
+        print("String to encrypt: " + self.string_in)
+        
+    def print_encrypted_string(self):
+        print("Encrypted string: " + self.encrypted_string)
     
     
  
@@ -268,8 +280,24 @@ test_enigma = EnigmaMachine(1, 2, 3, plug_board)
 
 test_string = "test"
 
-test_enigma.encrypt_string(test_string)
+test_enigma.string_in = test_string
 
-print(test_enigma.encrypted_string)
+test_enigma.print_string_in()
 
-print()
+test_enigma.encrypt_string()
+
+test_enigma.print_encrypted_string()
+
+test_enigma.parse_string()
+
+test_enigma.print_encrypted_string()
+
+test_enigma.parse_string()
+
+test_enigma.print_encrypted_string()
+
+test_enigma.parse_string()
+
+test_enigma.print_encrypted_string()
+
+
