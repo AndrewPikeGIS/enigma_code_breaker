@@ -108,29 +108,7 @@ class EnigmaMachine:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
             
-    def parse_string(self, input_string = ""):
-        
-        if input_string != "":
-            self.string_in = input_string
-        else:
-            input_string = self.string_in
-        
-        self.encrypted_string = ""
-        
-        if input_string[-4:] == ".txt":
-            with open(input_string, "r") as txt_in:
-                text = txt_in.read()
-                for letter in text:
-                    #run the encryption methods
-                    string_out = self.encrypt_string(letter)
-                    self.encrypted_string += string_out
-        else:
-            for letter in input_string:
-                #run the encryption methods      
-                string_out = self.encrypt_string(letter)
-                self.encrypted_string += string_out
-                
-        
+    
     
     def rotor_encryption_forward(self, char_in, rotor_in):
         letters = string.ascii_lowercase
@@ -190,6 +168,36 @@ class EnigmaMachine:
         
         return(char_out)
     
+    def parse_string(self, input_string = ""):
+        
+        if input_string != "":
+            self.string_in = input_string
+        else:
+            input_string = self.string_in
+        
+        if input_string != "":
+            self.encrypted_string = ""
+            if input_string[-4:] == ".txt":
+                with open(input_string, "r") as txt_in:
+                    text = txt_in.read()
+                    for letter in text:
+                        if letter != " ":
+                            #run the encryption methods
+                            string_out = self.encrypt_string(letter)
+                            self.encrypted_string += string_out
+                        else:
+                            self.encrypted_string += " "
+            else:
+                for letter in input_string:
+                    if letter != " ":
+                        #run the encryption methods      
+                        string_out = self.encrypt_string(letter)
+                        self.encrypted_string += string_out
+                    else:
+                        self.encrypted_string += " "
+                    
+        
+    
     def encrypt_string(self, string_in = ""):
         if string_in == "":
             string_in = self.string_in
@@ -209,7 +217,12 @@ class EnigmaMachine:
             #if position = rotate for rotor 2 then rotate 3
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
-
+            
+            # print(self.rotor_1.position)
+            # print(self.rotor_2.position)
+            # print(self.rotor_3.position)
+            # print(" ")
+            
             
             #run current char through plugboard
             if string_in in self.plug_board_pairs.keys():
@@ -268,26 +281,13 @@ plug_board = {
 
 test_enigma = EnigmaMachine(1, 2, 3, plug_board)
 
-test_string = "test"
+test_string = "test string"
 
 test_enigma.string_in = test_string
 
 test_enigma.print_string_in()
 
-test_enigma.encrypt_string()
-
-test_enigma.print_encrypted_string()
-
 test_enigma.parse_string()
 
 test_enigma.print_encrypted_string()
-
-test_enigma.parse_string()
-
-test_enigma.print_encrypted_string()
-
-test_enigma.parse_string()
-
-test_enigma.print_encrypted_string()
-
 
