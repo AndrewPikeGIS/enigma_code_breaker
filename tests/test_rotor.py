@@ -1,5 +1,5 @@
-import enigma_code.enigma_cypher_machine
+import enigma_code.enigma_cypher_machine as enigma
 
 
 def test_rotate():
-    pass
+    assert TRUE
