@@ -265,29 +265,3 @@ class EnigmaMachine:
 
     def print_encrypted_string(self):
         print("Encrypted string: " + self.encrypted_string)
-
-
-plug_board = {
-    "a": "j",
-    "g": "k",
-    "d": "b",
-    "t": "f",
-    "e": "w",
-    "h": "a",
-    "p": "c",
-    "o": "r",
-    "y": "e",
-    "n": "g"
-}
-
-test_enigma = EnigmaMachine(10, 2, 3, plug_board)
-
-test_string = "test string"
-
-test_enigma.string_in = test_string
-
-test_enigma.print_string_in()
-
-test_enigma.parse_string()
-
-test_enigma.print_encrypted_string()

@@ -9,3 +9,7 @@ def test_rotate():
     test_rotor.rotate_rotor()
 
     assert test_rotor.position == 2
+
+# build test to ensure no val matches itself in pairs
+
+# build test to make sure 26 vals and keys are created
