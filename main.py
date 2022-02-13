@@ -14,7 +14,7 @@ plug_board = {
     "n": "g"
 }
 
-test_enigma = enigma.EnigmaMachine(10, 2, 3, plug_board)
+test_enigma = enigma.EnigmaMachine(1, 2, 3, plug_board)
 
 test_string = "test string"
 

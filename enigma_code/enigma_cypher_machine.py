@@ -64,8 +64,14 @@ class EnigmaRotor:
     def rotate_rotor(self):
         self.position += 1
 
-        if self.position > 26:
+        if self.position >= 26:
             self.position = 0
+
+    def rotate_rotor_reverse(self):
+        self.position -= 1
+
+        if self.position < 0:
+            self.position = 26
 
     def set_step_position(self, rotor_seed):
         if rotor_seed >= 5 or rotor_seed < 1:
@@ -133,9 +139,7 @@ class EnigmaMachine:
         if position_in_rotor >= 26:
             position_in_rotor -= 26
 
-        char_in_rotor = list(rotor_pairs.keys())[position_in_rotor]
-
-        char_out = rotor_pairs[char_in_rotor]
+        char_out = list(rotor_pairs.values())[position_in_rotor]
 
         return(char_out)
 
@@ -162,9 +166,7 @@ class EnigmaMachine:
         if position_in_rotor >= 26:
             position_in_rotor -= 26
 
-        char_in_rotor = list(rotor_pairs.values())[position_in_rotor]
-
-        char_out = rotor_pairs[char_in_rotor]
+        char_out = list(rotor_pairs.keys())[position_in_rotor]
 
         return(char_out)
 
