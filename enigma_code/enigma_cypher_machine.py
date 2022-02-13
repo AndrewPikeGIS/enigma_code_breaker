@@ -105,6 +105,8 @@ class EnigmaMachine:
 
         self.encrypted_string = ""
 
+        self.decrypted_string = ""
+
         self.string_in = ""
 
         self.set_plug_board(plug_board)
@@ -190,8 +192,12 @@ class EnigmaMachine:
                                 self.encrypted_string += string_out
                             else:
                                 string_out = self.decrypt_string(letter)
+                                self.decrypted_string += string_out
                         else:
-                            self.encrypted_string += " "
+                            if direction == "forward":
+                                self.encrypted_string += " "
+                            else:
+                                self.decrypted_string += " "
             else:
                 for letter in input_string:
                     if letter != " ":
@@ -201,8 +207,12 @@ class EnigmaMachine:
                             self.encrypted_string += string_out
                         else:
                             string_out = self.decrypt_string(letter)
+                            self.decrypted_string += string_out
                     else:
-                        self.encrypted_string += " "
+                        if direction == "forward":
+                            self.encrypted_string += " "
+                        else:
+                            self.decrypted_string += " "
 
     def encrypt_string(self, string_in=""):
         if string_in == "":
@@ -261,7 +271,7 @@ class EnigmaMachine:
             # pass back through plug board
             if char_rotor1_b_out in self.plug_board_pairs.values():
                 vals = list(self.plug_board_pairs.values())
-                string_out = list(self.plug_board_pairs)[
+                string_out = list(self.plug_board_pairs.keys())[
                     vals.index(char_rotor1_b_out)]
             else:
                 string_out = string_in
@@ -325,7 +335,7 @@ class EnigmaMachine:
             # pass back through plug board
             if char_rotor1_b_out in self.plug_board_pairs.values():
                 vals = list(self.plug_board_pairs.values())
-                string_out = list(self.plug_board_pairs)[
+                string_out = list(self.plug_board_pairs.keys())[
                     vals.index(char_rotor1_b_out)]
             else:
                 string_out = string_in
@@ -337,3 +347,6 @@ class EnigmaMachine:
 
     def print_encrypted_string(self):
         print("Encrypted string: " + self.encrypted_string)
+
+    def print_decrypted_string(self):
+        print("Decrypted string: " + self.decrypted_string)
