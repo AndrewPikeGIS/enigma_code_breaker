@@ -28,6 +28,6 @@ encrypted_string = test_enigma.encrypted_string
 
 test_enigma.print_encrypted_string()
 
-test_enigma.parse_string(encrypted_string, "reverse")
+test_enigma.decrypt_string(encrypted_string, 1, 2, 3)
 
 test_enigma.print_decrypted_string()

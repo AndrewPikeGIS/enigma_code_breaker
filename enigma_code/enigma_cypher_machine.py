@@ -12,6 +12,8 @@ from doctest import testfile
 import random
 import string
 
+from sqlalchemy import null
+
 
 # need to fix the random component so that it is repeatable.
 
@@ -237,7 +239,7 @@ class EnigmaMachine:
             # print(self.rotor_1.position)
             # print(self.rotor_2.position)
             # print(self.rotor_3.position)
-            #print(" ")
+            # print(" ")
 
             # run current char through plugboard
             if string_in in self.plug_board_pairs.keys():
@@ -278,7 +280,19 @@ class EnigmaMachine:
 
             return(string_out)
 
-    def decrypt_string(self, string_in=""):
+    def decrypt_string(self,
+                       string_in="",
+                       rotor1_start=None,
+                       rotor2_start=None,
+                       rotor3_start=None):
+
+        if rotor1_start is not None:
+            self.rotor_1.position = rotor1_start
+        if rotor2_start is not None:
+            self.rotor_2.position = rotor2_start
+        if rotor3_start is not None:
+            self.rotor_3.position = rotor3_start
+
         if string_in == "":
             string_in = self.string_in
 
@@ -301,7 +315,7 @@ class EnigmaMachine:
             # print(self.rotor_1.position)
             # print(self.rotor_2.position)
             # print(self.rotor_3.position)
-            #print(" ")
+            # print(" ")
 
             # run current char through plugboard
             if string_in in self.plug_board_pairs.keys():
