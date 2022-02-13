@@ -170,7 +170,7 @@ class EnigmaMachine:
 
         return(char_out)
 
-    def parse_string(self, input_string=""):
+    def parse_string(self, input_string="", direction="forward"):
 
         if input_string != "":
             self.string_in = input_string
@@ -185,16 +185,22 @@ class EnigmaMachine:
                     for letter in text:
                         if letter != " ":
                             # run the encryption methods
-                            string_out = self.encrypt_string(letter)
-                            self.encrypted_string += string_out
+                            if direction == "forward":
+                                string_out = self.encrypt_string(letter)
+                                self.encrypted_string += string_out
+                            else:
+                                string_out = self.decrypt_string(letter)
                         else:
                             self.encrypted_string += " "
             else:
                 for letter in input_string:
                     if letter != " ":
                         # run the encryption methods
-                        string_out = self.encrypt_string(letter)
-                        self.encrypted_string += string_out
+                        if direction == "forward":
+                            string_out = self.encrypt_string(letter)
+                            self.encrypted_string += string_out
+                        else:
+                            string_out = self.decrypt_string(letter)
                     else:
                         self.encrypted_string += " "
 
@@ -204,7 +210,71 @@ class EnigmaMachine:
 
         if len(string_in) > 1:
             print("String length greater than 1 running through parse_string()")
-            self.parse_string(string_in)
+            self.parse_string(string_in, direction="forward")
+        else:
+
+            # rotate rotors
+            self.rotor_1.rotate_rotor()
+
+            # rotate rotor 1, if position = rotate for rotor 1 then rotate 2
+            if self.rotor_1.step_position == self.rotor_1.position:
+                self.rotor_2.rotate_rotor()
+
+            # if position = rotate for rotor 2 then rotate 3
+            if self.rotor_2.step_position == self.rotor_2.position:
+                self.rotor_3.rotate_rotor()
+
+            # print(self.rotor_1.position)
+            # print(self.rotor_2.position)
+            # print(self.rotor_3.position)
+            #print(" ")
+
+            # run current char through plugboard
+            if string_in in self.plug_board_pairs.keys():
+                string_in = self.plug_board_pairs[string_in]
+
+            # run current char through rotor 1
+            char_rotor1_out = self.rotor_encryption_forward(string_in, 1)
+
+            # run current char through rotor 2
+            char_rotor2_out = self.rotor_encryption_forward(char_rotor1_out, 2)
+
+            # run current char through rotor 3
+            char_rotor3_out = self.rotor_encryption_forward(char_rotor2_out, 3)
+
+            # run current char through reflector
+            char_reflector_out = self.rotor_encryption_forward(
+                char_rotor3_out, 4)
+
+            # pass back through rotors 3
+            char_rotor3_b_out = self.rotor_encryption_backward(
+                char_reflector_out, 3)
+
+            # pass back through rotor 2
+            char_rotor2_b_out = self.rotor_encryption_backward(
+                char_rotor3_b_out, 2)
+
+            # pass back through rotor 1
+            char_rotor1_b_out = self.rotor_encryption_backward(
+                char_rotor2_b_out, 1)
+
+            # pass back through plug board
+            if char_rotor1_b_out in self.plug_board_pairs.values():
+                vals = list(self.plug_board_pairs.values())
+                string_out = list(self.plug_board_pairs)[
+                    vals.index(char_rotor1_b_out)]
+            else:
+                string_out = string_in
+
+            return(string_out)
+
+    def decrypt_string(self, string_in=""):
+        if string_in == "":
+            string_in = self.string_in
+
+        if len(string_in) > 1:
+            print("String length greater than 1 running through parse_string()")
+            self.parse_string(string_in, direction="reverse")
         else:
 
             # rotate rotors
