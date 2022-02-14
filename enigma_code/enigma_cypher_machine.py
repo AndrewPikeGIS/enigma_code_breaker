@@ -61,7 +61,7 @@ class EnigmaRotor:
         self.rotor_pairs = dict(zip(keys, values))
 
     def get_rotor_pairs(self):
-        return(self.__rotor_pairs)
+        return(self.rotor_pairs)
 
     def rotate_rotor(self):
         self.position += 1
@@ -88,16 +88,17 @@ class EnigmaRotor:
 
     def rotor_encryption_backward(self, char_in):
         letters = string.ascii_lowercase
-        # get index positon of char_in
-        index_in = letters.index(char_in)
 
         rotor_index = self.position
         rotor_pairs = self.rotor_pairs
 
-        position_in_rotor = rotor_index + index_in
+        # get index positon of value that came out
+        index_in = list(rotor_pairs.values()).index(char_in)
 
-        if position_in_rotor >= 26:
-            position_in_rotor -= 26
+        position_in_rotor = rotor_index - index_in
+
+        if position_in_rotor < 0:
+            position_in_rotor += 26
 
         char_out = list(rotor_pairs.keys())[position_in_rotor]
 
@@ -220,45 +221,38 @@ class EnigmaMachine:
                 string_in = self.plug_board_pairs[string_in]
 
             # run current char through rotor 1
-            char_rotor1_out = self.rotor_encryption_forward(
-                string_in,
-                1
+            char_rotor1_out = self.rotor_1.rotor_encryption_forward(
+                string_in
             )
 
             # run current char through rotor 2
-            char_rotor2_out = self.rotor_encryption_forward(
-                char_rotor1_out,
-                2
+            char_rotor2_out = self.rotor_2.rotor_encryption_forward(
+                char_rotor1_out
             )
 
             # run current char through rotor 3
-            char_rotor3_out = self.rotor_encryption_forward(
-                char_rotor2_out,
-                3
+            char_rotor3_out = self.rotor_3.rotor_encryption_forward(
+                char_rotor2_out
             )
 
             # run current char through reflector
-            char_reflector_out = self.rotor_encryption_forward(
-                char_rotor3_out,
-                4
+            char_reflector_out = self.reflector.rotor_encryption_forward(
+                char_rotor3_out
             )
 
             # pass back through rotors 3
-            char_rotor3_b_out = self.rotor_encryption_backward(
-                char_reflector_out,
-                3
+            char_rotor3_b_out = self.rotor_3.rotor_encryption_backward(
+                char_reflector_out
             )
 
             # pass back through rotor 2
-            char_rotor2_b_out = self.rotor_encryption_backward(
-                char_rotor3_b_out,
-                2
+            char_rotor2_b_out = self.rotor_2.rotor_encryption_backward(
+                char_rotor3_b_out
             )
 
             # pass back through rotor 1
-            char_rotor1_b_out = self.rotor_encryption_backward(
-                char_rotor2_b_out,
-                1
+            char_rotor1_b_out = self.rotor_1.rotor_encryption_backward(
+                char_rotor2_b_out
             )
 
             # pass back through plug board
@@ -313,45 +307,38 @@ class EnigmaMachine:
                 string_in = self.plug_board_pairs[string_in]
 
             # run current char through rotor 1
-            char_rotor1_out = self.rotor_encryption_backward(
-                string_in,
-                1
+            char_rotor1_out = self.rotor_1.rotor_encryption_backward(
+                string_in
             )
 
             # run current char through rotor 2
-            char_rotor2_out = self.rotor_encryption_backward(
-                char_rotor1_out,
-                2
+            char_rotor2_out = self.rotor_2.rotor_encryption_backward(
+                char_rotor1_out
             )
 
             # run current char through rotor 3
-            char_rotor3_out = self.rotor_encryption_backward(
-                char_rotor2_out,
-                3
+            char_rotor3_out = self.rotor_3.rotor_encryption_backward(
+                char_rotor2_out
             )
 
             # run current char through reflector
-            char_reflector_out = self.rotor_encryption_backward(
-                char_rotor3_out,
-                4
+            char_reflector_out = self.reflector.rotor_encryption_backward(
+                char_rotor3_out
             )
 
             # pass back through rotors 3
-            char_rotor3_b_out = self.rotor_encryption_forward(
-                char_reflector_out,
-                3
+            char_rotor3_b_out = self.rotor_3.rotor_encryption_forward(
+                char_reflector_out
             )
 
             # pass back through rotor 2
-            char_rotor2_b_out = self.rotor_encryption_forward(
-                char_rotor3_b_out,
-                2
+            char_rotor2_b_out = self.rotor_2.rotor_encryption_forward(
+                char_rotor3_b_out
             )
 
             # pass back through rotor 1
-            char_rotor1_b_out = self.rotor_encryption_forward(
-                char_rotor2_b_out,
-                1
+            char_rotor1_b_out = self.rotor_1.rotor_encryption_forward(
+                char_rotor2_b_out
             )
 
             # pass back through plug board

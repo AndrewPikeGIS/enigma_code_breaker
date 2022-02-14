@@ -31,3 +31,9 @@ test_enigma.print_encrypted_string()
 test_enigma.decrypt_string(encrypted_string, 1, 2, 3)
 
 test_enigma.print_decrypted_string()
+
+#test_rotor = enigma.EnigmaRotor(1, 1, 1)
+
+# print(test_rotor.get_rotor_pairs())
+#letterin = test_rotor.rotor_encryption_forward("a")
+#letterout = test_rotor.rotor_encryption_backward(letterin)
