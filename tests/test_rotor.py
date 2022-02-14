@@ -5,6 +5,8 @@ import pytest
 
 import enigma_code_breaker.enigma_code.enigma_cypher_machine as enigma
 
+# test that rotating the rotor advances the positon.
+
 
 def test_rotate():
     test_rotor = enigma.EnigmaRotor(1, 1, 1)
@@ -33,6 +35,7 @@ def test_no_matched_vals():
     assert not matched_val
 
 # test that the forward and backward string encrypt return the same value, for all input letters.
+
 
 def test_for_and_back_return_same_val():
 
