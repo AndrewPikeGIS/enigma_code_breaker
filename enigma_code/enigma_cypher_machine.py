@@ -69,11 +69,39 @@ class EnigmaRotor:
         if self.position >= 26:
             self.position = 0
 
-    def rotate_rotor_reverse(self):
-        self.position -= 1
+    def rotor_encryption_forward(self, char_in):
+        letters = string.ascii_lowercase
+        # get index positon of char_in
+        index_in = letters.index(char_in)
 
-        if self.position < 0:
-            self.position = 26
+        rotor_index = self.position
+        rotor_pairs = self.rotor_pairs
+
+        position_in_rotor = rotor_index + index_in
+
+        if position_in_rotor >= 26:
+            position_in_rotor -= 26
+
+        char_out = list(rotor_pairs.values())[position_in_rotor]
+
+        return(char_out)
+
+    def rotor_encryption_backward(self, char_in):
+        letters = string.ascii_lowercase
+        # get index positon of char_in
+        index_in = letters.index(char_in)
+
+        rotor_index = self.position
+        rotor_pairs = self.rotor_pairs
+
+        position_in_rotor = rotor_index + index_in
+
+        if position_in_rotor >= 26:
+            position_in_rotor -= 26
+
+        char_out = list(rotor_pairs.keys())[position_in_rotor]
+
+        return(char_out)
 
     def set_step_position(self, rotor_seed):
         if rotor_seed >= 5 or rotor_seed < 1:
@@ -119,60 +147,6 @@ class EnigmaMachine:
         else:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
-
-    def rotor_encryption_forward(self, char_in, rotor_in):
-        letters = string.ascii_lowercase
-        # get index positon of char_in
-        index_in = letters.index(char_in)
-
-        if rotor_in == 1:
-            rotor_index = self.rotor_1.position
-            rotor_pairs = self.rotor_1.rotor_pairs
-        elif rotor_in == 2:
-            rotor_index = self.rotor_2.position
-            rotor_pairs = self.rotor_2.rotor_pairs
-        elif rotor_in == 3:
-            rotor_index = self.rotor_3.position
-            rotor_pairs = self.rotor_3.rotor_pairs
-        else:
-            rotor_index = 0
-            rotor_pairs = self.reflector.rotor_pairs
-
-        position_in_rotor = rotor_index + index_in
-
-        if position_in_rotor >= 26:
-            position_in_rotor -= 26
-
-        char_out = list(rotor_pairs.values())[position_in_rotor]
-
-        return(char_out)
-
-    def rotor_encryption_backward(self, char_in, rotor_in):
-        letters = string.ascii_lowercase
-        # get index positon of char_in
-        index_in = letters.index(char_in)
-
-        if rotor_in == 1:
-            rotor_index = self.rotor_1.position
-            rotor_pairs = self.rotor_1.rotor_pairs
-        elif rotor_in == 2:
-            rotor_index = self.rotor_2.position
-            rotor_pairs = self.rotor_2.rotor_pairs
-        elif rotor_in == 3:
-            rotor_index = self.rotor_3.position
-            rotor_pairs = self.rotor_3.rotor_pairs
-        else:
-            rotor_index = 0
-            rotor_pairs = self.reflector.rotor_pairs
-
-        position_in_rotor = rotor_index + index_in
-
-        if position_in_rotor >= 26:
-            position_in_rotor -= 26
-
-        char_out = list(rotor_pairs.keys())[position_in_rotor]
-
-        return(char_out)
 
     def parse_string(self, input_string="", direction="forward"):
 
