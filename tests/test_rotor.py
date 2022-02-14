@@ -1,4 +1,6 @@
 from pickle import TRUE
+from re import I
+from string import ascii_lowercase
 import pytest
 
 import enigma_code_breaker.enigma_code.enigma_cypher_machine as enigma
@@ -30,4 +32,24 @@ def test_no_matched_vals():
 
     assert not matched_val
 
-# build test to make sure 26 vals and keys are created
+# test that the forward and backward string encrypt return the same value, for all input letters.
+
+def test_for_and_back_return_same_val():
+
+    test_rotor = enigma.EnigmaRotor(1, 1, 1)
+
+    letters = ascii_lowercase
+
+    forward_eq_back = True
+
+    for x in range(26):
+        letterin = letters[x]
+        lettercryp = test_rotor.rotor_encryption_forward(letterin)
+        letterout = test_rotor.rotor_encryption_backward(lettercryp)
+
+        if letterin != letterout:
+            forward_eq_back = False
+            print(letterin)
+            print(letterout)
+
+    assert forward_eq_back

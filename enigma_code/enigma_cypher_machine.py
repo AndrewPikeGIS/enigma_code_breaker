@@ -87,7 +87,6 @@ class EnigmaRotor:
         return(char_out)
 
     def rotor_encryption_backward(self, char_in):
-        letters = string.ascii_lowercase
 
         rotor_index = self.position
         rotor_pairs = self.rotor_pairs
@@ -95,7 +94,7 @@ class EnigmaRotor:
         # get index positon of value that came out
         index_in = list(rotor_pairs.values()).index(char_in)
 
-        position_in_rotor = rotor_index - index_in
+        position_in_rotor = index_in - rotor_index
 
         if position_in_rotor < 0:
             position_in_rotor += 26

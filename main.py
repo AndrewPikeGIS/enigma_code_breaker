@@ -1,4 +1,5 @@
 import enigma_code.enigma_cypher_machine as enigma
+import string
 
 
 plug_board = {
@@ -32,8 +33,17 @@ test_enigma.decrypt_string(encrypted_string, 1, 2, 3)
 
 test_enigma.print_decrypted_string()
 
-#test_rotor = enigma.EnigmaRotor(1, 1, 1)
+test_rotor = enigma.EnigmaRotor(1, 1, 1)
 
-# print(test_rotor.get_rotor_pairs())
-#letterin = test_rotor.rotor_encryption_forward("a")
-#letterout = test_rotor.rotor_encryption_backward(letterin)
+letters = string.ascii_lowercase
+
+forward_eq_back = True
+
+letterin = "b"
+lettercryp = test_rotor.rotor_encryption_forward(letterin)
+letterout = test_rotor.rotor_encryption_backward(lettercryp)
+
+print(letterin)
+print(lettercryp)
+print(letterout)
+print(test_rotor.get_rotor_pairs())
