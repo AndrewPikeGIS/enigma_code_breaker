@@ -22,3 +22,4 @@ def test_plugboard():
 
     assert "t" in test_enigma.plug_board_pairs.keys()
     assert "j" not in test_enigma.plug_board_pairs.keys()
+    assert "j" in test_enigma.plug_board_pairs.values()
