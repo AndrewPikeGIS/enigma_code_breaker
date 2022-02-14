@@ -29,7 +29,7 @@ class EnigmaRotor:
         # builds rotor pairs
         self.build_rotor_pairs(rotor=rotor_seed)
 
-        # starting position for the rotor
+        # starting position for the rotor range 0-26
         self.position = starting_position
 
         # position where the rotor will force the neighboring rotor to rotate
@@ -114,6 +114,10 @@ class EnigmaRotor:
             self.step_position = 5
         else:
             self.step_position = 17
+
+    def check_position(self):
+        if self.position >= 26:
+            self.position = 25
 
 
 class EnigmaMachine:
