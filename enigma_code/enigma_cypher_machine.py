@@ -219,7 +219,7 @@ class EnigmaMachine:
             # print(self.rotor_3.position)
             # print(" ")
 
-            # run current char through plugboard
+            # run current char through plugboard    functionalize more for testing.
             if string_in in self.plug_board_pairs.keys():
                 string_in = self.plug_board_pairs[string_in]
 
@@ -305,7 +305,7 @@ class EnigmaMachine:
             # print(self.rotor_3.position)
             # print(" ")
 
-            # run current char through plugboard
+            # run current char through plugboard functionalize this more for testing.
             if string_in in self.plug_board_pairs.keys():
                 string_in = self.plug_board_pairs[string_in]
 
