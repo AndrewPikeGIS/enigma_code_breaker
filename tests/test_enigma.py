@@ -29,26 +29,26 @@ def test_plugboard():
 
 def test_plugboard_in_same_as_reverse():
     string_in = "t"
-    string_encrypted = test_enigma.encrypt_char_plugboard_forward(string_in)
-    string_out = test_enigma.encrypt_char_plugboard_backward(string_encrypted)
+    string_encrypted = test_enigma.encrypt_char_plugboard(string_in)
+    string_out = test_enigma.encrypt_char_plugboard(string_encrypted)
 
     assert string_in == string_out
 
     string_in = "n"
-    string_encrypted = test_enigma.encrypt_char_plugboard_forward(string_in)
-    string_out = test_enigma.encrypt_char_plugboard_backward(string_encrypted)
+    string_encrypted = test_enigma.encrypt_char_plugboard(string_in)
+    string_out = test_enigma.encrypt_char_plugboard(string_encrypted)
 
     assert string_in == string_out
 
     string_in = "b"
-    string_encrypted = test_enigma.encrypt_char_plugboard_forward(string_in)
-    string_out = test_enigma.encrypt_char_plugboard_backward(string_encrypted)
+    string_encrypted = test_enigma.encrypt_char_plugboard(string_in)
+    string_out = test_enigma.encrypt_char_plugboard(string_encrypted)
 
     assert string_in == string_out
 
     string_in = "z"
-    string_encrypted = test_enigma.encrypt_char_plugboard_forward(string_in)
-    string_out = test_enigma.encrypt_char_plugboard_backward(string_encrypted)
+    string_encrypted = test_enigma.encrypt_char_plugboard(string_in)
+    string_out = test_enigma.encrypt_char_plugboard(string_encrypted)
 
     assert string_in == string_out
 
