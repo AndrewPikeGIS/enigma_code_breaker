@@ -39,11 +39,4 @@ letters = string.ascii_lowercase
 
 forward_eq_back = True
 
-letterin = "b"
-lettercryp = test_rotor.rotor_encryption_forward(letterin)
-letterout = test_rotor.rotor_encryption_backward(lettercryp)
-
-print(letterin)
-print(lettercryp)
-print(letterout)
 print(test_rotor.get_rotor_pairs())

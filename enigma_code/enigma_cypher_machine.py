@@ -152,20 +152,7 @@ class EnigmaMachine:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
 
-    def encrypt_char_plugboard_forward(self, string_in):
-        if string_in in self.plug_board_pairs.keys():
-            string_out = self.plug_board_pairs[string_in]
-        elif string_in in self.plug_board_pairs.values():
-            vals = list(self.plug_board_pairs.values())
-            string_out = list(self.plug_board_pairs.keys())[
-                vals.index(string_in)
-            ]
-        else:
-            string_out = string_in
-
-        return(string_out)
-
-    def encrypt_char_plugboard_backward(self, string_in):
+    def encrypt_char_plugboard(self, string_in):
         if string_in in self.plug_board_pairs.keys():
             string_out = self.plug_board_pairs[string_in]
         elif string_in in self.plug_board_pairs.values():
@@ -246,7 +233,7 @@ class EnigmaMachine:
             # print(" ")
 
             # run current char through plugboard    functionalize more for testing.
-            string_in = self.encrypt_char_plugboard_forward(string_in)
+            string_in = self.encrypt_char_plugboard(string_in)
 
             # run current char through rotor 1
             char_rotor1_out = self.rotor_1.rotor_encryption_forward(
@@ -284,8 +271,9 @@ class EnigmaMachine:
             )
 
             # pass back through plug board
-            string_out = self.encrypt_char_plugboard_backward(
-                char_rotor1_b_out)
+            string_out = self.encrypt_char_plugboard(
+                char_rotor1_b_out
+            )
 
             return(string_out)
 
@@ -327,8 +315,7 @@ class EnigmaMachine:
             # print(" ")
 
             # run current char through plugboard functionalize this more for testing.
-            if string_in in self.plug_board_pairs.keys():
-                string_in = self.plug_board_pairs[string_in]
+            string_in = self.encrypt_char_plugboard(string_in)
 
             # run current char through rotor 1
             char_rotor1_out = self.rotor_1.rotor_encryption_backward(
@@ -366,12 +353,7 @@ class EnigmaMachine:
             )
 
             # pass back through plug board
-            if char_rotor1_b_out in self.plug_board_pairs.values():
-                vals = list(self.plug_board_pairs.values())
-                string_out = list(self.plug_board_pairs.keys())[
-                    vals.index(char_rotor1_b_out)]
-            else:
-                string_out = string_in
+            string_out = self.encrypt_char_plugboard(char_rotor1_b_out)
 
             return(string_out)
 
