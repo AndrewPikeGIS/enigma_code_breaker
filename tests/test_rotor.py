@@ -37,7 +37,7 @@ def test_no_matched_vals():
 # test that the forward and backward string encrypt return the same value, for all input letters.
 
 
-def test_for_and_back_return_same_val():
+def test_rotor_forward_and_back_same_val():
 
     test_rotor = enigma.EnigmaRotor(1, 1, 1)
 
