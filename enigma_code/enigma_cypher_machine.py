@@ -223,10 +223,10 @@ class EnigmaMachine:
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
 
-            print(self.rotor_1.position)
-            print(self.rotor_2.position)
-            print(self.rotor_3.position)
-            print(" ")
+            # print(self.rotor_1.position)
+            # print(self.rotor_2.position)
+            # print(self.rotor_3.position)
+            # print(" ")
 
             # run current char through plugboard    functionalize more for testing.
             string_in = self.encrypt_char_plugboard(string_in)
@@ -287,7 +287,10 @@ class EnigmaMachine:
             self.rotor_3.position = rotor3_start
 
         if string_in == "":
-            string_in = self.string_in
+            if self.encrypted_string is None:
+                string_in = self.string_in
+            else:
+                string_in = self.encrypted_string
 
         if len(string_in) > 1:
             print("String length greater than 1 running through parse_string()")
@@ -305,10 +308,10 @@ class EnigmaMachine:
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
 
-            print(self.rotor_1.position)
-            print(self.rotor_2.position)
-            print(self.rotor_3.position)
-            print(" ")
+            # print(self.rotor_1.position)
+            # print(self.rotor_2.position)
+            # print(self.rotor_3.position)
+            # print(" ")
 
             # run current char through plugboard functionalize this more for testing.
             string_in = self.encrypt_char_plugboard(string_in)

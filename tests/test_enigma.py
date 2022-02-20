@@ -134,3 +134,17 @@ def test_plug_to_rotor_to_reflector_back():
             "\nR1B: " + char_rotor1_back + "\nP1B: " + string_out
 
         assert string_char == string_out, message
+
+# this will obviously fail right now...
+
+
+def test_forward_back_encrypt():
+    string_in = "a"
+
+    test_enigma.string_in = string_in
+
+    test_enigma.encrypt_string()
+
+    test_enigma.decrypt_string()
+
+    assert string_in == test_enigma.decrypted_string
