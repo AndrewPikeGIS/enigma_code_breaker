@@ -181,11 +181,9 @@ class EnigmaMachine:
                         if letter != " ":
                             # run the encryption methods
                             if direction == "forward":
-                                string_out = self.encrypt_string(letter)
-                                self.encrypted_string += string_out
+                                self.encrypt_string(letter)
                             else:
-                                string_out = self.decrypt_string(letter)
-                                self.decrypted_string += string_out
+                                self.decrypt_string(letter)
                         else:
                             if direction == "forward":
                                 self.encrypted_string += " "
@@ -196,11 +194,9 @@ class EnigmaMachine:
                     if letter != " ":
                         # run the encryption methods
                         if direction == "forward":
-                            string_out = self.encrypt_string(letter)
-                            self.encrypted_string += string_out
+                            self.encrypt_string(letter)
                         else:
-                            string_out = self.decrypt_string(letter)
-                            self.decrypted_string += string_out
+                            self.decrypt_string(letter)
                     else:
                         if direction == "forward":
                             self.encrypted_string += " "
@@ -227,10 +223,10 @@ class EnigmaMachine:
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
 
-            # print(self.rotor_1.position)
-            # print(self.rotor_2.position)
-            # print(self.rotor_3.position)
-            # print(" ")
+            print(self.rotor_1.position)
+            print(self.rotor_2.position)
+            print(self.rotor_3.position)
+            print(" ")
 
             # run current char through plugboard    functionalize more for testing.
             string_in = self.encrypt_char_plugboard(string_in)
@@ -275,7 +271,7 @@ class EnigmaMachine:
                 char_rotor1_b_out
             )
 
-            return(string_out)
+            self.encrypted_string += string_out
 
     def decrypt_string(self,
                        string_in="",
@@ -309,10 +305,10 @@ class EnigmaMachine:
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
 
-            # print(self.rotor_1.position)
-            # print(self.rotor_2.position)
-            # print(self.rotor_3.position)
-            # print(" ")
+            print(self.rotor_1.position)
+            print(self.rotor_2.position)
+            print(self.rotor_3.position)
+            print(" ")
 
             # run current char through plugboard functionalize this more for testing.
             string_in = self.encrypt_char_plugboard(string_in)
@@ -355,7 +351,7 @@ class EnigmaMachine:
             # pass back through plug board
             string_out = self.encrypt_char_plugboard(char_rotor1_b_out)
 
-            return(string_out)
+            self.decrypted_string += string_out
 
     def print_string_in(self):
         print("String to encrypt: " + self.string_in)

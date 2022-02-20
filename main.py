@@ -17,7 +17,7 @@ plug_board = {
 
 test_enigma = enigma.EnigmaMachine(1, 2, 3, plug_board)
 
-test_string = "test string"
+test_string = "test"
 
 test_enigma.string_in = test_string
 
@@ -32,11 +32,3 @@ test_enigma.print_encrypted_string()
 test_enigma.decrypt_string(encrypted_string, 1, 2, 3)
 
 test_enigma.print_decrypted_string()
-
-test_rotor = enigma.EnigmaRotor(1, 1, 1)
-
-letters = string.ascii_lowercase
-
-forward_eq_back = True
-
-print(test_rotor.get_rotor_pairs())
