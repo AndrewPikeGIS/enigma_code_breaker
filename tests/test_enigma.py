@@ -172,6 +172,8 @@ def test_plug_rotor_back():
 # this will obviously fail right now...
 
 def test_forward_back_encrypt():
+    test_enigma = enigma.EnigmaMachine(1, 1, 1, plugboard_test)
+
     string_in = "h"
 
     test_enigma.string_in = string_in
@@ -179,7 +181,7 @@ def test_forward_back_encrypt():
     test_enigma.encrypt_string()
 
     # repopulates encrypted string with decrypted value.
-    test_enigma.decrypt_string()
+    test_enigma.decrypt_string(1, 1, 1)
 
     assert string_in == test_enigma.decrypted_string
 

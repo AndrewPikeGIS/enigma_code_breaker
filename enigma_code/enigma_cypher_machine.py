@@ -197,6 +197,10 @@ class EnigmaMachine:
         return(string_out)
 
     def parse_string(self, input_string="", direction="forward"):
+        if direction == "forward":
+            self.encrypted_string = ""
+        else:
+            self.decrypted_string = ""
 
         if input_string != "":
             self.string_in = input_string
@@ -204,7 +208,6 @@ class EnigmaMachine:
             input_string = self.string_in
 
         if input_string != "":
-            self.encrypted_string = ""
             if input_string[-4:] == ".txt":
                 with open(input_string, "r") as txt_in:
                     text = txt_in.read()
@@ -326,6 +329,7 @@ class EnigmaMachine:
             print("String length greater than 1 running through parse_string()")
             self.parse_string(string_in, direction=direction)
         else:
+            self.decrypted_string = ""
             self.encrypt_string(string_in, direction=direction)
 
     def print_string_in(self):
@@ -336,3 +340,11 @@ class EnigmaMachine:
 
     def print_decrypted_string(self):
         print("Decrypted string: " + self.decrypted_string)
+
+    def set_rotor_positons(self, rotor1=1, rotor2=1, rotor3=1):
+        if rotor1 is not None:
+            self.rotor_1.position = rotor1
+        if rotor2 is not None:
+            self.rotor_2.position = rotor2
+        if rotor3 is not None:
+            self.rotor_3.position = rotor3
