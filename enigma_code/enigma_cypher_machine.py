@@ -193,8 +193,6 @@ class EnigmaMachine:
             string_out = list(self.reflector.keys())[
                 vals.index(string_in)
             ]
-        else:
-            string_out = string_in
 
         return(string_out)
 
@@ -213,10 +211,7 @@ class EnigmaMachine:
                     for letter in text:
                         if letter != " ":
                             # run the encryption methods
-                            if direction == "forward":
-                                self.encrypt_string(letter)
-                            else:
-                                self.decrypt_string(letter)
+                            self.encrypt_string(letter, direction)
                         else:
                             if direction == "forward":
                                 self.encrypted_string += " "
@@ -226,17 +221,14 @@ class EnigmaMachine:
                 for letter in input_string:
                     if letter != " ":
                         # run the encryption methods
-                        if direction == "forward":
-                            self.encrypt_string(letter)
-                        else:
-                            self.decrypt_string(letter)
+                        self.encrypt_string(letter, direction)
                     else:
                         if direction == "forward":
                             self.encrypted_string += " "
                         else:
                             self.decrypted_string += " "
 
-    def encrypt_string(self, string_in=""):
+    def encrypt_string(self, string_in="", direction="forward"):
         if string_in == "":
             string_in = self.string_in
 
@@ -304,13 +296,18 @@ class EnigmaMachine:
                 char_rotor1_b_out
             )
 
-            self.encrypted_string += string_out
+            if direction == "forward":
+                self.encrypted_string += string_out
+            else:
+                self.decrypted_string += string_out
 
     def decrypt_string(self,
-                       string_in="",
                        rotor1_start=None,
                        rotor2_start=None,
-                       rotor3_start=None):
+                       rotor3_start=None,
+                       string_in=""):
+
+        direction = "reverse"
 
         if rotor1_start is not None:
             self.rotor_1.position = rotor1_start
@@ -327,67 +324,9 @@ class EnigmaMachine:
 
         if len(string_in) > 1:
             print("String length greater than 1 running through parse_string()")
-            self.parse_string(string_in, direction="reverse")
+            self.parse_string(string_in, direction=direction)
         else:
-
-            # rotate rotors
-            self.rotor_1.rotate_rotor()
-
-            # rotate rotor 1, if position = rotate for rotor 1 then rotate 2
-            if self.rotor_1.step_position == self.rotor_1.position:
-                self.rotor_2.rotate_rotor()
-
-            # if position = rotate for rotor 2 then rotate 3
-            if self.rotor_2.step_position == self.rotor_2.position:
-                self.rotor_3.rotate_rotor()
-
-            # print(self.rotor_1.position)
-            # print(self.rotor_2.position)
-            # print(self.rotor_3.position)
-            # print(" ")
-
-            # run current char through plugboard functionalize this more for testing.
-            string_in = self.encrypt_char_plugboard(string_in)
-
-            # run current char through rotor 1
-            char_rotor1_out = self.rotor_1.rotor_encryption_backward(
-                string_in
-            )
-
-            # run current char through rotor 2
-            char_rotor2_out = self.rotor_2.rotor_encryption_backward(
-                char_rotor1_out
-            )
-
-            # run current char through rotor 3
-            char_rotor3_out = self.rotor_3.rotor_encryption_backward(
-                char_rotor2_out
-            )
-
-            # run current char through reflector
-            char_reflector_out = self.encrypt_char_reflector(
-                char_rotor3_out
-            )
-
-            # pass back through rotors 3
-            char_rotor3_b_out = self.rotor_3.rotor_encryption_forward(
-                char_reflector_out
-            )
-
-            # pass back through rotor 2
-            char_rotor2_b_out = self.rotor_2.rotor_encryption_forward(
-                char_rotor3_b_out
-            )
-
-            # pass back through rotor 1
-            char_rotor1_b_out = self.rotor_1.rotor_encryption_forward(
-                char_rotor2_b_out
-            )
-
-            # pass back through plug board
-            string_out = self.encrypt_char_plugboard(char_rotor1_b_out)
-
-            self.decrypted_string += string_out
+            self.encrypt_string(string_in, direction=direction)
 
     def print_string_in(self):
         print("String to encrypt: " + self.string_in)

@@ -125,50 +125,51 @@ def test_plug_to_rotor_to_reflector_back():
 
 
 def test_plug_rotor_back():
-    string_char = "a"
 
-    string_encrypt = test_enigma.encrypt_char_plugboard(string_char)
+    for string_char in ascii_lowercase:
 
-    # run current char through rotor 1
-    char_rotor1_out = test_enigma.rotor_1.rotor_encryption_forward(
-        string_encrypt
-    )
+        string_encrypt = test_enigma.encrypt_char_plugboard(string_char)
 
-    char_reflector = test_enigma.encrypt_char_reflector(
-        char_rotor1_out
-    )
+        # run current char through rotor 1
+        char_rotor1_out = test_enigma.rotor_1.rotor_encryption_forward(
+            string_encrypt
+        )
 
-    char_rotor1_back = test_enigma.rotor_1.rotor_encryption_backward(
-        char_reflector
-    )
+        char_reflector = test_enigma.encrypt_char_reflector(
+            char_rotor1_out
+        )
 
-    string_encrypted = test_enigma.encrypt_char_plugboard(char_rotor1_back)
+        char_rotor1_back = test_enigma.rotor_1.rotor_encryption_backward(
+            char_reflector
+        )
 
-    # send encrypted string back through workflow.
+        string_encrypted = test_enigma.encrypt_char_plugboard(char_rotor1_back)
 
-    string_encrypted_back = test_enigma.encrypt_char_plugboard(
-        string_encrypted)
+        # send encrypted string back through workflow.
 
-    # run current char through rotor 1
-    char_rotor1_out_b = test_enigma.rotor_1.rotor_encryption_backward(
-        string_encrypted_back
-    )
+        string_encrypted_back = test_enigma.encrypt_char_plugboard(
+            string_encrypted)
 
-    char_reflector_b = test_enigma.encrypt_char_reflector(
-        char_rotor1_out_b
-    )
+        # run current char through rotor 1
+        char_rotor1_out_b = test_enigma.rotor_1.rotor_encryption_forward(
+            string_encrypted_back
+        )
 
-    char_rotor1_back_b = test_enigma.rotor_1.rotor_encryption_forward(
-        char_reflector_b
-    )
+        char_reflector_b = test_enigma.encrypt_char_reflector(
+            char_rotor1_out_b
+        )
 
-    string_decrypted = test_enigma.encrypt_char_plugboard(char_rotor1_back_b)
+        char_rotor1_back_b = test_enigma.rotor_1.rotor_encryption_backward(
+            char_reflector_b
+        )
 
-    assert string_char == string_decrypted
+        string_decrypted = test_enigma.encrypt_char_plugboard(
+            char_rotor1_back_b)
+
+        assert string_char == string_decrypted
 
 
 # this will obviously fail right now...
-
 
 def test_forward_back_encrypt():
     string_in = "h"
@@ -177,6 +178,7 @@ def test_forward_back_encrypt():
 
     test_enigma.encrypt_string()
 
+    # repopulates encrypted string with decrypted value.
     test_enigma.decrypt_string()
 
     assert string_in == test_enigma.decrypted_string
