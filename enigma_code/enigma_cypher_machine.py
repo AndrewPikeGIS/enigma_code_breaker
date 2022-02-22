@@ -201,11 +201,16 @@ class EnigmaMachine:
             self.encrypted_string = ""
         else:
             self.decrypted_string = ""
-
-        if input_string != "":
-            self.string_in = input_string
+        if direction == "forward":
+            if input_string != "":
+                self.string_in = input_string
+            else:
+                input_string = self.string_in
         else:
-            input_string = self.string_in
+            if input_string != "":
+                self.encrypted_string = input_string
+            else:
+                input_string = self.encrypted_string
 
         if input_string != "":
             if input_string[-4:] == ".txt":
@@ -256,53 +261,74 @@ class EnigmaMachine:
             # print(self.rotor_3.position)
             # print(" ")
 
+            # print(string_in)
             # run current char through plugboard    functionalize more for testing.
             string_in = self.encrypt_char_plugboard(string_in)
+
+            # print("string_plug_return: " + string_in)
 
             # run current char through rotor 1
             char_rotor1_out = self.rotor_1.rotor_encryption_forward(
                 string_in
             )
 
+            # print("rotor_1_return: " + char_rotor1_out)
+
             # run current char through rotor 2
             char_rotor2_out = self.rotor_2.rotor_encryption_forward(
                 char_rotor1_out
             )
+
+            # print("rotor2 return: " + char_rotor2_out)
 
             # run current char through rotor 3
             char_rotor3_out = self.rotor_3.rotor_encryption_forward(
                 char_rotor2_out
             )
 
+            # print("rotor3 return: " + char_rotor3_out)
+
             # run current char through reflector
             char_reflector_out = self.encrypt_char_reflector(
                 char_rotor3_out
             )
+
+            # print("reflector return: " + char_reflector_out)
 
             # pass back through rotors 3
             char_rotor3_b_out = self.rotor_3.rotor_encryption_backward(
                 char_reflector_out
             )
 
+            # print("rotor3 back_return: " + char_rotor3_b_out)
+
             # pass back through rotor 2
             char_rotor2_b_out = self.rotor_2.rotor_encryption_backward(
                 char_rotor3_b_out
             )
+
+            # print("rotor2 back_return: " + char_rotor2_b_out)
 
             # pass back through rotor 1
             char_rotor1_b_out = self.rotor_1.rotor_encryption_backward(
                 char_rotor2_b_out
             )
 
+            # print("rotor1 back_return: " + char_rotor1_b_out)
+
             # pass back through plug board
             string_out = self.encrypt_char_plugboard(
                 char_rotor1_b_out
             )
 
+            # print("plugboard back return: " + string_out)
+
             if direction == "forward":
                 self.encrypted_string += string_out
+                return(string_out)
             else:
                 self.decrypted_string += string_out
+                return(string_out)
 
     def decrypt_string(self,
                        rotor1_start=None,
