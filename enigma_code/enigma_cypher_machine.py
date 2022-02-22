@@ -132,8 +132,7 @@ class EnigmaMachine:
         self.rotor_3 = EnigmaRotor(
             rotor_position=3, starting_position=rotor3_start, rotor_seed=3)
 
-        self.reflector = EnigmaRotor(
-            rotor_position=5, starting_position=1, rotor_seed=5)
+        self.reflector = {}
 
         self.plug_board_pairs = {}
 
@@ -144,6 +143,27 @@ class EnigmaMachine:
         self.string_in = ""
 
         self.set_plug_board(plug_board)
+
+        self.build_reflector()
+
+    def build_reflector(self):
+        keys = []
+        values = []
+
+        pair = string.ascii_lowercase
+
+        random.seed(10)
+
+        for x in range(13):
+            keys.append(pair[0])
+            pair = pair.replace(pair[0], "")
+            for val in values:
+                pair = pair.replace(val, "")
+            val_add = pair[random.randint(0, len(pair)-1)]
+            values.append(val_add)
+            pair = pair.replace(val_add, "")
+
+        self.reflector = dict(zip(keys, values))
 
     def set_plug_board(self, plug_board_pairs):
         if len(plug_board_pairs.keys()) <= 10:
@@ -158,6 +178,19 @@ class EnigmaMachine:
         elif string_in in self.plug_board_pairs.values():
             vals = list(self.plug_board_pairs.values())
             string_out = list(self.plug_board_pairs.keys())[
+                vals.index(string_in)
+            ]
+        else:
+            string_out = string_in
+
+        return(string_out)
+
+    def encrypt_char_reflector(self, string_in):
+        if string_in in self.reflector.keys():
+            string_out = self.reflector[string_in]
+        elif string_in in self.reflector.values():
+            vals = list(self.reflector.values())
+            string_out = list(self.reflector.keys())[
                 vals.index(string_in)
             ]
         else:
@@ -247,7 +280,7 @@ class EnigmaMachine:
             )
 
             # run current char through reflector
-            char_reflector_out = self.reflector.rotor_encryption_forward(
+            char_reflector_out = self.encrypt_char_reflector(
                 char_rotor3_out
             )
 
@@ -332,7 +365,7 @@ class EnigmaMachine:
             )
 
             # run current char through reflector
-            char_reflector_out = self.reflector.rotor_encryption_backward(
+            char_reflector_out = self.encrypt_char_reflector(
                 char_rotor3_out
             )
 
