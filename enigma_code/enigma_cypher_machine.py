@@ -217,24 +217,26 @@ class EnigmaMachine:
                 with open(input_string, "r") as txt_in:
                     text = txt_in.read()
                     for letter in text:
-                        if letter != " ":
+                        if letter.lower() in string.ascii_lowercase:
+                            letter = letter.lower()
                             # run the encryption methods
                             self.encrypt_string(letter, direction)
                         else:
                             if direction == "forward":
-                                self.encrypted_string += " "
+                                self.encrypted_string += letter
                             else:
-                                self.decrypted_string += " "
+                                self.decrypted_string += letter
             else:
                 for letter in input_string:
-                    if letter != " ":
+                    if letter.lower() in string.ascii_lowercase:
                         # run the encryption methods
+                        letter = letter.lower()
                         self.encrypt_string(letter, direction)
                     else:
                         if direction == "forward":
-                            self.encrypted_string += " "
+                            self.encrypted_string += letter
                         else:
-                            self.decrypted_string += " "
+                            self.decrypted_string += letter
 
     def encrypt_string(self, string_in="", direction="forward"):
         if string_in == "":
@@ -256,72 +258,48 @@ class EnigmaMachine:
             if self.rotor_2.step_position == self.rotor_2.position:
                 self.rotor_3.rotate_rotor()
 
-            # print(self.rotor_1.position)
-            # print(self.rotor_2.position)
-            # print(self.rotor_3.position)
-            # print(" ")
-
-            # print(string_in)
             # run current char through plugboard    functionalize more for testing.
             string_in = self.encrypt_char_plugboard(string_in)
-
-            # print("string_plug_return: " + string_in)
 
             # run current char through rotor 1
             char_rotor1_out = self.rotor_1.rotor_encryption_forward(
                 string_in
             )
 
-            # print("rotor_1_return: " + char_rotor1_out)
-
             # run current char through rotor 2
             char_rotor2_out = self.rotor_2.rotor_encryption_forward(
                 char_rotor1_out
             )
-
-            # print("rotor2 return: " + char_rotor2_out)
 
             # run current char through rotor 3
             char_rotor3_out = self.rotor_3.rotor_encryption_forward(
                 char_rotor2_out
             )
 
-            # print("rotor3 return: " + char_rotor3_out)
-
             # run current char through reflector
             char_reflector_out = self.encrypt_char_reflector(
                 char_rotor3_out
             )
-
-            # print("reflector return: " + char_reflector_out)
 
             # pass back through rotors 3
             char_rotor3_b_out = self.rotor_3.rotor_encryption_backward(
                 char_reflector_out
             )
 
-            # print("rotor3 back_return: " + char_rotor3_b_out)
-
             # pass back through rotor 2
             char_rotor2_b_out = self.rotor_2.rotor_encryption_backward(
                 char_rotor3_b_out
             )
-
-            # print("rotor2 back_return: " + char_rotor2_b_out)
 
             # pass back through rotor 1
             char_rotor1_b_out = self.rotor_1.rotor_encryption_backward(
                 char_rotor2_b_out
             )
 
-            # print("rotor1 back_return: " + char_rotor1_b_out)
-
             # pass back through plug board
             string_out = self.encrypt_char_plugboard(
                 char_rotor1_b_out
             )
-
-            # print("plugboard back return: " + string_out)
 
             if direction == "forward":
                 self.encrypted_string += string_out

@@ -18,7 +18,7 @@ plug_board = {
 
 test_enigma = enigma.EnigmaMachine(1, 1, 1, plug_board)
 
-test_string = "this may finally work"
+test_string = "I can't believe this finally works what a nightmare!"
 
 test_enigma.string_in = test_string
 
@@ -31,5 +31,3 @@ test_enigma.print_encrypted_string()
 test_enigma.decrypt_string(1, 1, 1)
 
 test_enigma.print_decrypted_string()
-
-test_enigma.set_rotor_positons()
