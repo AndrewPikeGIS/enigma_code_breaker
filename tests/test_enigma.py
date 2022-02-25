@@ -1,5 +1,6 @@
 from cgi import test
 import pytest
+import os
 from string import ascii_lowercase
 
 import enigma_code_breaker.enigma_code.enigma_cypher_machine as enigma
@@ -197,3 +198,19 @@ def test_reflector_values():
     string_reflector = "".join(lst_test)
 
     assert ascii_lowercase == string_reflector
+
+
+def test_encrypted_txt_out():
+    string_to_encyrpt = "This should write out to a txt!"
+
+    test_enigma.encrypt_string(string_to_encyrpt)
+
+    test_enigma.write_encrypted_string_to_text(
+        r"tests\test_data", "test_encryption")
+
+    pathout = r"tests\test_data\test_encryption.txt"
+
+    name, extension = os.path.splitext(pathout)
+
+    assert os.path.exists(pathout)
+    assert extension == ".txt"
