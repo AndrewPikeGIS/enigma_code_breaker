@@ -28,8 +28,8 @@ test_enigma.parse_string()
 
 test_enigma.print_encrypted_string()
 
-test_enigma.write_encrypted_string_to_text(r"encrypted_commands", "command1")
+#test_enigma.write_encrypted_string_to_text(r"encrypted_commands", "command1")
 
-#test_enigma.decrypt_string(1, 1, 1)
+test_enigma.decrypt_string(1, 1, 1)
 
-# test_enigma.print_decrypted_string()
+test_enigma.print_decrypted_string()

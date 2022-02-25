@@ -197,12 +197,12 @@ class EnigmaMachine:
 
         return(string_out)
 
-    def parse_string(self, input_string="", direction="forward"):
-        if direction == "forward":
+    def parse_string(self, input_string="", direction="encrypt"):
+        if direction == "encrypt":
             self.encrypted_string = ""
         else:
             self.decrypted_string = ""
-        if direction == "forward":
+        if direction == "encrypt":
             if input_string != "":
                 self.string_in = input_string
             else:
@@ -223,7 +223,7 @@ class EnigmaMachine:
                             # run the encryption methods
                             self.encrypt_string(letter, direction)
                         else:
-                            if direction == "forward":
+                            if direction == "encrypt":
                                 self.encrypted_string += letter
                             else:
                                 self.decrypted_string += letter
@@ -234,18 +234,18 @@ class EnigmaMachine:
                         letter = letter.lower()
                         self.encrypt_string(letter, direction)
                     else:
-                        if direction == "forward":
+                        if direction == "encrypt":
                             self.encrypted_string += letter
                         else:
                             self.decrypted_string += letter
 
-    def encrypt_string(self, string_in="", direction="forward"):
+    def encrypt_string(self, string_in="", direction="encrypt"):
         if string_in == "":
             string_in = self.string_in
 
         if len(string_in) > 1:
             print("String length greater than 1 running through parse_string()")
-            self.parse_string(string_in, direction="forward")
+            self.parse_string(string_in, direction=direction)
         else:
 
             # rotate rotors
@@ -302,7 +302,7 @@ class EnigmaMachine:
                 char_rotor1_b_out
             )
 
-            if direction == "forward":
+            if direction == "encrypt":
                 self.encrypted_string += string_out
                 return(string_out)
             else:
@@ -321,7 +321,7 @@ class EnigmaMachine:
                        rotor3_start=None,
                        string_in=""):
 
-        direction = "reverse"
+        direction = "decrypt"
 
         if rotor1_start is not None:
             self.rotor_1.position = rotor1_start
