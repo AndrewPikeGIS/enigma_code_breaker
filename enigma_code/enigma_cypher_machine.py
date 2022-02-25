@@ -310,7 +310,7 @@ class EnigmaMachine:
                 return(string_out)
 
     def write_encrypted_string_to_text(self, path, name):
-        txt_out = os.path.join(path, name, ".txt")
+        txt_out = os.path.join(path, name + ".txt")
 
         with open(txt_out, "w") as txt:
             txt.write(self.encrypted_string)
@@ -344,13 +344,13 @@ class EnigmaMachine:
             self.encrypt_string(string_in, direction=direction)
 
     def print_string_in(self):
-        print("String to encrypt: " + self.string_in)
+        print("String to encrypt: " + self.string_in + "\n")
 
     def print_encrypted_string(self):
-        print("Encrypted string: " + self.encrypted_string)
+        print("Encrypted string: " + self.encrypted_string + "\n")
 
     def print_decrypted_string(self):
-        print("Decrypted string: " + self.decrypted_string)
+        print("Decrypted string: " + self.decrypted_string + "\n")
 
     def set_rotor_positons(self, rotor1=1, rotor2=1, rotor3=1):
         if rotor1 is not None:
