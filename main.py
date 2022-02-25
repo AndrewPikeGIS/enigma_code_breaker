@@ -18,7 +18,7 @@ plug_board = {
 
 test_enigma = enigma.EnigmaMachine(1, 1, 1, plug_board)
 
-test_string = "I can't believe this finally works what a nightmare!"
+test_string = r"german_commands/command1.txt"
 
 test_enigma.string_in = test_string
 

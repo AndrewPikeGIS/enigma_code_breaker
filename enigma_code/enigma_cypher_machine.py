@@ -11,6 +11,7 @@
 from doctest import testfile
 import random
 import string
+import os
 
 from sqlalchemy import null
 
@@ -307,6 +308,12 @@ class EnigmaMachine:
             else:
                 self.decrypted_string += string_out
                 return(string_out)
+
+    def write_encrypted_string_to_text(self, path, name):
+        txt_out = os.path.join(path, name, ".txt")
+
+        with open(txt_out, "w") as txt:
+            txt.write(self.encrypted_string)
 
     def decrypt_string(self,
                        rotor1_start=None,
