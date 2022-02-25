@@ -18,7 +18,8 @@ plugboard_test = {
     "o": "r",
 }
 
-test_enigma = enigma.EnigmaMachine(1, 1, 1, plugboard_test)
+test_enigma = enigma.EnigmaMachine(
+    plug_board=plugboard_test, rotor1_start=1, rotor2_start=1, rotor3_start=1)
 
 # test that values in plug board match input dct.
 
@@ -173,8 +174,6 @@ def test_plug_rotor_back():
 # this will obviously fail right now...
 
 def test_forward_back_encrypt():
-    test_enigma = enigma.EnigmaMachine(1, 1, 1, plugboard_test)
-
     string_in = "h"
 
     test_enigma.string_in = string_in

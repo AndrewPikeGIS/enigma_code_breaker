@@ -16,7 +16,8 @@ plug_board = {
     "o": "r",
 }
 
-test_enigma = enigma.EnigmaMachine(1, 1, 1, plug_board)
+test_enigma = enigma.EnigmaMachine(
+    plug_board=plug_board, rotor1_start=2, rotor2_start=3, rotor3_start=1)
 
 test_string = r"german_commands/command1.txt"
 
@@ -30,6 +31,6 @@ test_enigma.print_encrypted_string()
 
 #test_enigma.write_encrypted_string_to_text(r"encrypted_commands", "command1")
 
-test_enigma.decrypt_string(1, 1, 1)
+test_enigma.decrypt_string(2, 3, 1)
 
 test_enigma.print_decrypted_string()

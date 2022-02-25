@@ -1,13 +1,3 @@
-# enigma build
-# entry string
-# right hand rotor rotates
-# plugboard swap for 10 pairs
-# enter through entry wheel, military version did 1-1 but it is important for the entry into the wheels.
-# pass through 3 rotors
-# hit reflector scramble again.
-# pass back through three rotors
-# plug board swap for 10 same 10 pairs
-
 from doctest import testfile
 import random
 import string
@@ -122,16 +112,16 @@ class EnigmaRotor:
 
 
 class EnigmaMachine:
-    def __init__(self, rotor1_start, rotor2_start, rotor3_start, plug_board):
+    def __init__(self, plug_board, rotor1_seed=1, rotor1_start=1, rotor2_seed=2, rotor2_start=1, rotor3_seed=3, rotor3_start=1):
 
         self.rotor_1 = EnigmaRotor(
-            rotor_position=1, starting_position=rotor1_start, rotor_seed=1)
+            rotor_position=1, starting_position=rotor1_start, rotor_seed=rotor1_seed)
 
         self.rotor_2 = EnigmaRotor(
-            rotor_position=2, starting_position=rotor2_start, rotor_seed=2)
+            rotor_position=2, starting_position=rotor2_start, rotor_seed=rotor2_seed)
 
         self.rotor_3 = EnigmaRotor(
-            rotor_position=3, starting_position=rotor3_start, rotor_seed=3)
+            rotor_position=3, starting_position=rotor3_start, rotor_seed=rotor3_seed)
 
         self.reflector = {}
 
