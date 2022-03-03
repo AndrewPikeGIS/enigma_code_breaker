@@ -6,6 +6,8 @@ class Victory:
     def __init__(self):
         self.encrypted_message = ""
 
+        self.known_value = ""
+
         self.build_enigma_machine()
 
     def read_encrypted_text(self, txt_path):
@@ -36,8 +38,8 @@ class Victory:
             "q": "r",
             "s": "t"}
 
-        self.Enigma = EnigmaMachine(plugboard, rotor1seed, rotor1start,
-                                    rotor2seed, rotor2start, rotor3seed, rotor3start)
+        self.Enigma = EnigmaMachine(self.plugboard, self.rotor1seed, self.rotor1start,
+                                    self.rotor2seed, self.rotor2start, self.rotor3seed, self.rotor3start)
 
     def set_known_value(self, value, start_position):
 
@@ -52,12 +54,30 @@ class Victory:
 
     def check_output_on_known_val(self):
         # check the decrypted string against the known value string and give a score
-        pass
+        if self.Enigma.decrypted_string != "" and self.known_value != "":
 
-    def decrypt_with_known_value(self):
+            known_string = self.known_value
+
+            decrypted_string = self.Enigma.decrypted_string
+
+            counter = 0
+
+            for x in range(len(known_string)):
+                if decrypted_string[x] != " ":
+                    if known_string[x] == decrypted_string[x]:
+                        counter += 1
+
+            self.decrypt_score = (counter/len(decrypted_string)) * 100
+        elif self.known_value != "":
+            print("Missing decrypted value. Please run decrypt_string() first.")
+        elif self.known_value == "":
+            print(
+                "Known values missing. Please add known value with set_known_value() first.")
+
+    def decrypt_string(self):
         # code to decrypt the string when there are some known values.
-
-        pass
+        self.Enigma.string_in = self.encrypted_message
+        self.Enigma.decrypt_string()
 
     def interate_on_starting_positions(self):
         # iterate the enigma starting positions
@@ -79,6 +99,14 @@ VictoryTest.read_encrypted_text(r"encrypted_commands/command1.txt")
 VictoryTest.set_known_value("Good Morning,\n\nWeather today", 0)
 
 VictoryTest.set_known_value(
-    "Hail Hitler.", len(VictoryTest.encrypted_message)-11)
+    "Hail Hitler.", len(VictoryTest.encrypted_message)-12)
+
+VictoryTest.decrypt_string()
+
+VictoryTest.check_output_on_known_val()
 
 print(VictoryTest.known_value)
+
+print(VictoryTest.Enigma.decrypted_string)
+
+print(VictoryTest.decrypt_score)
