@@ -16,15 +16,15 @@ class Victory:
 
         self.known_value = " " * len(self.encrypted_message)
 
-    def build_enigma_machine(self):
+    def build_enigma_machine(self, rotor1seed=1, rotor1start=1, rotor2seed=1, rotor2start=1, rotor3seed=1, rotor3start=1):
 
-        self.rotor1seed = 1
-        self.rotor2seed = 1
-        self.rotor3seed = 1
+        self.rotor1seed = rotor1seed
+        self.rotor2seed = rotor2seed
+        self.rotor3seed = rotor3seed
 
-        self.rotor1start = 1
-        self.rotor2start = 1
-        self.rotor3start = 1
+        self.rotor1start = rotor1start
+        self.rotor2start = rotor2start
+        self.rotor3start = rotor3start
 
         self.plugboard = {
             "a": "b",
@@ -81,7 +81,10 @@ class Victory:
 
     def interate_on_starting_positions(self):
         # iterate the enigma starting positions
-        pass
+        self.rotor1start += 1
+
+        if self.rotor1start >= 26:
+            self.rotor1start = 0
 
     def iterate_on_rotor_seed(self):
         # iterate the enigma seeds
