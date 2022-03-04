@@ -1,4 +1,4 @@
-from sympy import E
+import pandas as pd
 from enigma_code.enigma_cypher_machine import EnigmaMachine
 
 
@@ -85,6 +85,13 @@ class Victory:
 
         if self.rotor1start >= 26:
             self.rotor1start = 0
+            self.rotor2start += 1
+            if self.rotor2start >= 26:
+                self.rotor3start = 0
+                self.rotor3start += 1
+                if self.rotor3start >= 26:
+                    return("All possibilities checked")
+        return(None)
 
     def iterate_on_rotor_seed(self):
         # iterate the enigma seeds
@@ -93,6 +100,15 @@ class Victory:
     def iterate_on_plugboard(self):
         # iterate the plugboard
         pass
+
+    def iterate_on_reflector(self):
+        # iterate on reflector
+        pass
+
+    def check_enigma_settings(self, number_of_iterations):
+
+        for x in range(number_of_iterations):
+            pass
 
 
 VictoryTest = Victory()
