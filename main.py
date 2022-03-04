@@ -17,7 +17,7 @@ plug_board = {
 }
 
 test_enigma = enigma.EnigmaMachine(
-    plug_board=plug_board, rotor1_start=2, rotor2_start=3, rotor3_start=1)
+    plug_board=plug_board, rotor1_start=2, rotor2_start=3, rotor3_start=1, rotor1_seed=1, rotor2_seed=2, rotor3_seed=3, reflector_seed=10)
 
 test_string = r"german_commands/command1.txt"
 

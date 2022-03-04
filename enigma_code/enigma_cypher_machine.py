@@ -112,7 +112,7 @@ class EnigmaRotor:
 
 
 class EnigmaMachine:
-    def __init__(self, plug_board, rotor1_seed=1, rotor1_start=1, rotor2_seed=2, rotor2_start=1, rotor3_seed=3, rotor3_start=1):
+    def __init__(self, plug_board, rotor1_seed=1, rotor1_start=1, rotor2_seed=2, rotor2_start=1, rotor3_seed=3, rotor3_start=1, reflector_seed=10):
 
         self.rotor_1 = EnigmaRotor(
             rotor_position=1, starting_position=rotor1_start, rotor_seed=rotor1_seed)
@@ -135,15 +135,15 @@ class EnigmaMachine:
 
         self.set_plug_board(plug_board)
 
-        self.build_reflector()
+        self.build_reflector(reflector_seed)
 
-    def build_reflector(self):
+    def build_reflector(self, reflector_seed):
         keys = []
         values = []
 
         pair = string.ascii_lowercase
 
-        random.seed(10)
+        random.seed(reflector_seed)
 
         for x in range(13):
             keys.append(pair[0])

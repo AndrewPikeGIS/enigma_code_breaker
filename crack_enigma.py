@@ -8,23 +8,12 @@ class Victory:
 
         self.known_value = ""
 
-        self.build_enigma_machine()
-
-    def read_encrypted_text(self, txt_path):
-        with open(txt_path, "r") as txt_file:
-            self.encrypted_message = txt_file.read()
-
-        self.known_value = " " * len(self.encrypted_message)
-
-    def build_enigma_machine(self, rotor1seed=1, rotor1start=1, rotor2seed=1, rotor2start=1, rotor3seed=1, rotor3start=1):
-
-        self.rotor1seed = rotor1seed
-        self.rotor2seed = rotor2seed
-        self.rotor3seed = rotor3seed
-
-        self.rotor1start = rotor1start
-        self.rotor2start = rotor2start
-        self.rotor3start = rotor3start
+        self.rotor1seed = 1
+        self.rotor2seed = 1
+        self.rotor3seed = 1
+        self.rotor1start = 0
+        self.rotor2start = 0
+        self.rotor3start = 0
 
         self.plugboard = {
             "a": "b",
@@ -37,6 +26,16 @@ class Victory:
             "o": "p",
             "q": "r",
             "s": "t"}
+
+        self.build_enigma_machine()
+
+    def read_encrypted_text(self, txt_path):
+        with open(txt_path, "r") as txt_file:
+            self.encrypted_message = txt_file.read()
+
+        self.known_value = " " * len(self.encrypted_message)
+
+    def build_enigma_machine(self):
 
         self.Enigma = EnigmaMachine(self.plugboard, self.rotor1seed, self.rotor1start,
                                     self.rotor2seed, self.rotor2start, self.rotor3seed, self.rotor3start)
