@@ -143,6 +143,12 @@ class EnigmaMachine:
 
         pair = string.ascii_lowercase
 
+        # starting case reflector seed between 0 -10
+        if reflector_seed > 10:
+            reflector_seed = 10
+        elif reflector_seed < 0:
+            reflector_seed = 0
+
         random.seed(reflector_seed)
 
         for x in range(13):

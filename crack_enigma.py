@@ -14,6 +14,7 @@ class Victory:
         self.rotor1start = 0
         self.rotor2start = 0
         self.rotor3start = 0
+        self.reflectorseed = 10
 
         self.plugboard = {
             "a": "b",
@@ -38,7 +39,7 @@ class Victory:
     def build_enigma_machine(self):
 
         self.Enigma = EnigmaMachine(self.plugboard, self.rotor1seed, self.rotor1start,
-                                    self.rotor2seed, self.rotor2start, self.rotor3seed, self.rotor3start)
+                                    self.rotor2seed, self.rotor2start, self.rotor3seed, self.rotor3start, self.reflectorseed)
 
     def set_known_value(self, value, start_position):
 
