@@ -1,1 +1,1 @@
-run,rotor1_seed,rotor2_seed,rotor3_seed,rotor1_start,rotor2_start,rotor3_start,reflector,plugboard,score,encrypted_message,decrypted_message
+run,rotor1_seed,rotor2_seed,rotor3_seed,rotor1_start,rotor2_start,rotor3_start,reflector,plugboard,score,encrypted_message,decrypted_message,matched_values

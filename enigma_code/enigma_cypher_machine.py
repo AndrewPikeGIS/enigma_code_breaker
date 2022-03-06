@@ -332,7 +332,7 @@ class EnigmaMachine:
                 string_in = self.encrypted_string
 
         if len(string_in) > 1:
-            print("String length greater than 1 running through parse_string()")
+
             self.parse_string(string_in, direction=direction)
         else:
             self.decrypted_string = ""

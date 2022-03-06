@@ -10,6 +10,8 @@ class Victory:
 
         self.known_value = ""
 
+        self.matched_values = ""
+
         self.rotor1seed = 1
         self.rotor2seed = 1
         self.rotor3seed = 1
@@ -70,6 +72,11 @@ class Victory:
                 if decrypted_string[x] != " ":
                     if known_string[x] == decrypted_string[x]:
                         counter += 1
+                        self.matched_values += known_string[x]
+                    else:
+                        self.matched_values += " "
+                else:
+                    self.matched_values += " "
 
             self.decrypt_score = (counter/len(decrypted_string)) * 100
         elif self.known_value != "":
@@ -116,8 +123,8 @@ class Victory:
     def store_decrypt_score(self, run_number):
         new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor1seed], "rotor2_seed": [self.rotor2seed], "rotor3_seed": [self.rotor3seed],
                                        "rotor1_start": [self.rotor1start], "rotor2_start": [self.rotor2start], "rotor3_start": [self.rotor3start],
-                                       "reflector": [self.Enigma.reflector], "plugboard": [self.Enigma.plug_board_pairs], "score": [self.decrypt_score], "encrypted_message": [self.encrypted_message],
-                                       "decrypted_message": [self.decrypted_string]})
+                                       "reflector": [self.Enigma.reflector], "plugboard": [self.Enigma.plug_board_pairs], "score": [self.decrypt_score], "known_value": [self.known_value],
+                                       "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values]})
 
         concat_df = pd.concat([self.score_table, new_score], ignore_index=True)
 
@@ -127,8 +134,16 @@ class Victory:
         self.score_table.to_excel(
             "output/decrypt_score_" + str(dt.date.today()) + ".xlsx")
 
-    def check_enigma_settings(self, number_of_iterations):
+    def hours_minutes_seconds(self, timedelta):
 
+        days = timedelta.days
+        seconds = timedelta.seconds
+        hours = seconds//3600
+        minutes = (seconds//60) % 60
+        print("Time elapsed days:", days, "hours:", hours, "minutes:", minutes)
+
+    def check_enigma_settings(self, number_of_iterations):
+        time_start = dt.datetime.now()
         # this may need to be changed to a while loop...
         for x in range(number_of_iterations):
             # workflow for checking settings
@@ -150,6 +165,11 @@ class Victory:
                 #
                 # if required iterate on reflector
 
+        score = self.score_table["score"]
+        print("Max score found == " + str(score.max()))
+        print("")
+        self.hours_minutes_seconds(dt.datetime.now()-time_start)
+
 
 VictoryTest = Victory()
 
@@ -161,4 +181,4 @@ VictoryTest.set_known_value(
     "Hail Hitler.", len(VictoryTest.encrypted_message)-12)
 
 
-VictoryTest.check_enigma_settings(100)
+VictoryTest.check_enigma_settings(10000)
