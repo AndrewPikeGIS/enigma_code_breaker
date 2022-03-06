@@ -1,3 +1,4 @@
+
 import pandas as pd
 from enigma_code.enigma_cypher_machine import EnigmaMachine
 
@@ -27,6 +28,8 @@ class Victory:
             "o": "p",
             "q": "r",
             "s": "t"}
+
+        self.score_table = pd.read_csv(r"data/decrypt_score.csv")
 
         self.build_enigma_machine()
 
@@ -78,6 +81,7 @@ class Victory:
         # code to decrypt the string when there are some known values.
         self.Enigma.string_in = self.encrypted_message
         self.Enigma.decrypt_string()
+        self.decrypted_string = self.Enigma.decrypted_string
 
     def interate_on_starting_positions(self):
         # iterate the enigma starting positions
@@ -91,7 +95,7 @@ class Victory:
                 self.rotor3start += 1
                 if self.rotor3start >= 26:
                     return("All possibilities checked")
-        return(None)
+        return()
 
     def iterate_on_rotor_seed(self):
         # iterate the enigma seeds
@@ -105,10 +109,34 @@ class Victory:
         # iterate on reflector
         pass
 
+    def store_decrypt_score(self, run_number):
+        new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor1seed], "rotor2_seed": [self.rotor2seed], "rotor3_seed": [self.rotor3seed],
+                                       "rotor1_start": [self.rotor1start], "rotor2_start": [self.rotor2start], "rotor3_start": [self.rotor3start],
+                                       "reflector": [self.Enigma.reflector], "plugboard": [self.Enigma.plug_board_pairs], "encrypted_message": [self.encrypted_message],
+                                       "decrypted_message": [self.Enigma.decrypted_string]})
+
+        concat_df = pd.concat([self.score_table, new_score], ignore_index=True)
+
+        self.score_table = concat_df
+
+    def write_score_table(self):
+        pass
+
     def check_enigma_settings(self, number_of_iterations):
 
+        # this may need to be changed to a while loop...
         for x in range(number_of_iterations):
-            pass
+            # workflow for checking settings
+            # decrypt the text
+            self.decrypt_score()
+            # store score in table
+
+            # iterate on start position
+            #
+            # iterate on plugboard
+            # iterate on start position
+            #
+            # if required iterate on reflector
 
 
 VictoryTest = Victory()
