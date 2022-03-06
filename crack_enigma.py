@@ -1,6 +1,7 @@
 
 import pandas as pd
 from enigma_code.enigma_cypher_machine import EnigmaMachine
+import datetime as dt
 
 
 class Victory:
@@ -94,8 +95,11 @@ class Victory:
                 self.rotor3start = 0
                 self.rotor3start += 1
                 if self.rotor3start >= 26:
-                    return("All possibilities checked")
-        return()
+                    self.rotor1start = 0
+                    self.rotor2start = 0
+                    self.rotor3start = 0
+                    return("Done")
+        return("")
 
     def iterate_on_rotor_seed(self):
         # iterate the enigma seeds
@@ -112,15 +116,16 @@ class Victory:
     def store_decrypt_score(self, run_number):
         new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor1seed], "rotor2_seed": [self.rotor2seed], "rotor3_seed": [self.rotor3seed],
                                        "rotor1_start": [self.rotor1start], "rotor2_start": [self.rotor2start], "rotor3_start": [self.rotor3start],
-                                       "reflector": [self.Enigma.reflector], "plugboard": [self.Enigma.plug_board_pairs], "encrypted_message": [self.encrypted_message],
-                                       "decrypted_message": [self.Enigma.decrypted_string]})
+                                       "reflector": [self.Enigma.reflector], "plugboard": [self.Enigma.plug_board_pairs], "score": [self.decrypt_score], "encrypted_message": [self.encrypted_message],
+                                       "decrypted_message": [self.decrypted_string]})
 
         concat_df = pd.concat([self.score_table, new_score], ignore_index=True)
 
         self.score_table = concat_df
 
     def write_score_table(self):
-        pass
+        self.score_table.to_excel(
+            "output/decrypt_score_" + str(dt.date.today()) + ".xlsx")
 
     def check_enigma_settings(self, number_of_iterations):
 
@@ -128,15 +133,22 @@ class Victory:
         for x in range(number_of_iterations):
             # workflow for checking settings
             # decrypt the text
-            self.decrypt_score()
+            self.decrypt_string()
+            self.check_output_on_known_val()
+            self.store_decrypt_score(x)
             # store score in table
-
+            self.write_score_table()
             # iterate on start position
-            #
+            iterate_start_return = self.interate_on_starting_positions()
             # iterate on plugboard
-            # iterate on start position
-            #
-            # if required iterate on reflector
+            if iterate_start_return == "Done":
+                iterate_plug_return = self.iterate_on_plugboard()
+
+                if iterate_plug_return == "Done":
+                    self.iterate_on_reflector()
+                # iterate on start position
+                #
+                # if required iterate on reflector
 
 
 VictoryTest = Victory()
@@ -148,12 +160,5 @@ VictoryTest.set_known_value("Good Morning,\n\nWeather today", 0)
 VictoryTest.set_known_value(
     "Hail Hitler.", len(VictoryTest.encrypted_message)-12)
 
-VictoryTest.decrypt_string()
 
-VictoryTest.check_output_on_known_val()
-
-print(VictoryTest.known_value)
-
-print(VictoryTest.Enigma.decrypted_string)
-
-print(VictoryTest.decrypt_score)
+VictoryTest.check_enigma_settings(100)

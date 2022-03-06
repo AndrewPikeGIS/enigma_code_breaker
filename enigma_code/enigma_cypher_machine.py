@@ -240,7 +240,6 @@ class EnigmaMachine:
             string_in = self.string_in
 
         if len(string_in) > 1:
-            print("String length greater than 1 running through parse_string()")
             self.parse_string(string_in, direction=direction)
         else:
 
