@@ -1,4 +1,5 @@
 
+from string import ascii_lowercase
 import pandas as pd
 from enigma_code.enigma_cypher_machine import EnigmaMachine
 import datetime as dt
@@ -60,6 +61,7 @@ class Victory:
 
     def check_output_on_known_val(self):
         # check the decrypted string against the known value string and give a score
+        self.matched_values = ""
         if self.Enigma.decrypted_string != "" and self.known_value != "":
 
             known_string = self.known_value
@@ -67,18 +69,22 @@ class Victory:
             decrypted_string = self.Enigma.decrypted_string
 
             counter = 0
-
+            # update this so that only non space values are checked.
             for x in range(len(known_string)):
-                if decrypted_string[x] != " ":
-                    if known_string[x] == decrypted_string[x]:
-                        counter += 1
-                        self.matched_values += known_string[x]
+                if decrypted_string[x] in ascii_lowercase:
+                    if decrypted_string[x] != " ":
+                        if known_string[x] == decrypted_string[x]:
+                            counter += 1
+                            self.matched_values += known_string[x]
+                        else:
+                            self.matched_values += " "
                     else:
                         self.matched_values += " "
                 else:
-                    self.matched_values += " "
+                    self.matched_values += decrypted_string[x]
 
-            self.decrypt_score = (counter/len(decrypted_string)) * 100
+            self.decrypt_score = (
+                counter/len(known_string.replace(" ", ""))) * 100
         elif self.known_value != "":
             print("Missing decrypted value. Please run decrypt_string() first.")
         elif self.known_value == "":
@@ -99,7 +105,7 @@ class Victory:
             self.rotor1start = 0
             self.rotor2start += 1
             if self.rotor2start >= 26:
-                self.rotor3start = 0
+                self.rotor2start = 0
                 self.rotor3start += 1
                 if self.rotor3start >= 26:
                     self.rotor1start = 0
@@ -110,21 +116,21 @@ class Victory:
 
     def iterate_on_rotor_seed(self):
         # iterate the enigma seeds
-        pass
+        return("Done")
 
     def iterate_on_plugboard(self):
         # iterate the plugboard
-        pass
+        return("Done")
 
     def iterate_on_reflector(self):
         # iterate on reflector
-        pass
+        return("Done")
 
     def store_decrypt_score(self, run_number):
         new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor1seed], "rotor2_seed": [self.rotor2seed], "rotor3_seed": [self.rotor3seed],
                                        "rotor1_start": [self.rotor1start], "rotor2_start": [self.rotor2start], "rotor3_start": [self.rotor3start],
                                        "reflector": [self.Enigma.reflector], "plugboard": [self.Enigma.plug_board_pairs], "score": [self.decrypt_score], "known_value": [self.known_value],
-                                       "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values]})
+                                       "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values], "encrypted_message": [self.encrypted_message]})
 
         concat_df = pd.concat([self.score_table, new_score], ignore_index=True)
 
@@ -132,7 +138,7 @@ class Victory:
 
     def write_score_table(self):
         self.score_table.to_excel(
-            "output/decrypt_score_" + str(dt.date.today()) + ".xlsx")
+            "output/decrypt_score_" + str(self.number_of_iterations) + "_" + str(dt.date.today()) + ".xlsx")
 
     def hours_minutes_seconds(self, timedelta):
 
@@ -140,35 +146,73 @@ class Victory:
         seconds = timedelta.seconds
         hours = seconds//3600
         minutes = (seconds//60) % 60
-        print("Time elapsed days:", days, "hours:", hours, "minutes:", minutes)
+        print("Time elapsed days:", days, "hours:",
+              hours, "minutes:", minutes, "\n")
 
     def check_enigma_settings(self, number_of_iterations):
         time_start = dt.datetime.now()
+        self.number_of_iterations = number_of_iterations
+        print_count = 0
         # this may need to be changed to a while loop...
         for x in range(number_of_iterations):
-            # workflow for checking settings
+
             # decrypt the text
             self.decrypt_string()
+
+            # check decrypted text with known val
             self.check_output_on_known_val()
+
+            if self.decrypt_score == 100:
+                break
+            # store the decrypted values in the score dataframe
             self.store_decrypt_score(x)
-            # store score in table
-            self.write_score_table()
+
             # iterate on start position
             iterate_start_return = self.interate_on_starting_positions()
-            # iterate on plugboard
+
             if iterate_start_return == "Done":
+                # iterate on plugboard
                 iterate_plug_return = self.iterate_on_plugboard()
 
                 if iterate_plug_return == "Done":
-                    self.iterate_on_reflector()
-                # iterate on start position
-                #
-                # if required iterate on reflector
+                    # iterate on reflector
+                    iterate_reflector_return = self.iterate_on_reflector()
+
+                    if iterate_reflector_return == "Done":
+                        # iterate on rotor seed
+                        iterate_seed_return = self.iterate_on_rotor_seed()
+
+                        if iterate_seed_return == "Done":
+                            # all combinations checked.
+                            print("All combinations checked\n")
+                            break
+
+            percentage = (x/number_of_iterations)*100
+
+            if percentage >= 25.0 and print_count == 0:
+                print("25% complete")
+                print_count += 1
+            elif percentage >= 50 and print_count == 1:
+                print("50% complete")
+                print_count += 1
+            elif percentage >= 75 and print_count == 2:
+                print("75% complete")
+                print_count += 1
+            elif percentage >= 99.0 and print_count == 3:
+                print("99% complete")
+                print_count += 1
+
+        # store score in table
+        self.write_score_table()
 
         score = self.score_table["score"]
         print("Max score found == " + str(score.max()))
         print("")
-        self.hours_minutes_seconds(dt.datetime.now()-time_start)
+
+        delta_time = dt.datetime.now()-time_start
+        self.hours_minutes_seconds(delta_time)
+        print("Time per iteration:")
+        print(delta_time/number_of_iterations)
 
 
 VictoryTest = Victory()
@@ -181,4 +225,4 @@ VictoryTest.set_known_value(
     "Hail Hitler.", len(VictoryTest.encrypted_message)-12)
 
 
-VictoryTest.check_enigma_settings(10000)
+VictoryTest.check_enigma_settings(20000)
