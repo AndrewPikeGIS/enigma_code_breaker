@@ -29,7 +29,7 @@ class Victory(EnigmaMachine):
 
         self.reflector_seed = 0
 
-        self.plugboard = {
+        self.plug_board = {
             "a": "b",
             "c": "d",
             "e": "f",
@@ -43,9 +43,9 @@ class Victory(EnigmaMachine):
 
         self.score_table = pd.read_csv(r"data/decrypt_score.csv")
 
-        self.build_reflector(self.reflector_seed)
+        self.build_reflector()
 
-        self.set_plug_board(self.plugboard)
+        self.set_plug_board()
 
         self.build_rotors()
 
@@ -98,27 +98,27 @@ class Victory(EnigmaMachine):
             print(
                 "Known values missing. Please add known value with set_known_value() first.")
 
-    def decrypt_message(self):
-        # code to decrypt the string when there are some known values.
-        self.string_in = self.encrypted_string
-        self.decrypt_string()
-
     def interate_on_starting_positions(self):
         # iterate the enigma starting positions
-        self.rotor_1.position += 1
 
-        if self.rotor_1.position >= 26:
-            self.rotor_1.position = 0
-            self.rotor_2.position += 1
-            if self.rotor_2.position >= 26:
-                self.rotor_2.position = 0
-                self.rotor_3.position += 1
-                if self.rotor_3.position >= 26:
-                    self.rotor_1.position = 0
-                    self.rotor_2.position = 0
-                    self.rotor_3.position = 0
-                    return("Done")
-        return("")
+        return_val = ""
+        self.rotor1_start += 1
+        if self.rotor1_start >= 26:
+            self.rotor1_start = 0
+            self.rotor2_start += 1
+            if self.rotor2_start >= 26:
+                self.rotor2_start = 0
+                self.rotor3_start += 1
+                if self.rotor3_start >= 26:
+                    self.rotor1_start = 0
+                    self.rotor2_start = 0
+                    self.rotor3_start = 0
+                    return_val = "Done"
+        self.rotor_1.position = self.rotor1_start
+        self.rotor_2.position = self.rotor2_start
+        self.rotor_3.position = self.rotor3_start
+
+        return(return_val)
 
     def iterate_on_rotor_seed(self):
         # iterate the enigma seeds
@@ -132,14 +132,15 @@ class Victory(EnigmaMachine):
         # iterate on reflector
         if self.reflector_seed != 100:
             self.reflector_seed += 1
+            self.build_reflector()
         else:
             return("Done")
 
     def store_decrypt_score(self, run_number):
         new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor_1.rotor_seed], "rotor2_seed": [self.rotor_2.rotor_seed], "rotor3_seed": [self.rotor_3.rotor_seed],
-                                       "rotor1_start": [self.rotor_1.position], "rotor2_start": [self.rotor_2.position], "rotor3_start": [self.rotor_3.position],
+                                       "rotor1_start": [self.rotor1_start], "rotor2_start": [self.rotor2_start], "rotor3_start": [self.rotor3_start],
                                        "reflector": [self.reflector], "plugboard": [self.plug_board_pairs], "score": [self.decrypt_score], "known_value": [self.known_value],
-                                       "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values], "encrypted_message": [self.encrypted_string]})
+                                       "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values], "encrypted_message": [self.encrypted_string], "reflector_seed": [self.reflector_seed]})
 
         concat_df = pd.concat([self.score_table, new_score], ignore_index=True)
 
@@ -150,7 +151,6 @@ class Victory(EnigmaMachine):
             "output/decrypt_score_" + str(self.number_of_iterations) + "_" + str(dt.date.today()) + ".xlsx")
 
     def hours_minutes_seconds(self, timedelta):
-
         days = timedelta.days
         seconds = timedelta.seconds
         hours = seconds//3600
@@ -165,7 +165,7 @@ class Victory(EnigmaMachine):
         # this may need to be changed to a while loop...
         for x in range(number_of_iterations):
             # decrypt the text
-            self.decrypt_message()
+            self.decrypt_string()
 
             # check decrypted text with known val
             self.check_output_on_known_val()

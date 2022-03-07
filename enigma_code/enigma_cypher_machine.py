@@ -135,15 +135,17 @@ class EnigmaMachine:
 
         self.plug_board_pairs = {}
 
+        self.plug_board = plug_board
+
         self.encrypted_string = ""
 
         self.decrypted_string = ""
 
         self.string_in = ""
 
-        self.set_plug_board(plug_board)
+        self.set_plug_board()
 
-        self.build_reflector(self.reflector_seed)
+        self.build_reflector()
 
         self.build_rotors()
 
@@ -157,19 +159,19 @@ class EnigmaMachine:
         self.rotor_3 = EnigmaRotor(
             rotor_position=3, starting_position=self.rotor3_start, rotor_seed=self.rotor3_seed)
 
-    def build_reflector(self, reflector_seed):
+    def build_reflector(self):
         keys = []
         values = []
 
         pair = string.ascii_lowercase
 
         # starting case reflector seed between 0 -100
-        if reflector_seed > 100:
-            reflector_seed = 100
-        elif reflector_seed < 0:
-            reflector_seed = 0
+        if self.reflector_seed > 100:
+            self.reflector_seed = 100
+        elif self.reflector_seed < 0:
+            self.reflector_seed = 0
 
-        random.seed(reflector_seed)
+        random.seed(self.reflector_seed)
 
         for x in range(13):
             keys.append(pair[0])
@@ -182,9 +184,10 @@ class EnigmaMachine:
 
         self.reflector = dict(zip(keys, values))
 
-    def set_plug_board(self, plug_board_pairs):
-        if len(plug_board_pairs.keys()) <= 10:
-            self.plug_board_pairs = plug_board_pairs
+    def set_plug_board(self):
+
+        if len(self.plug_board.keys()) <= 10:
+            self.plug_board_pairs = self.plug_board
         else:
             print("MAXIMUM 10 PLUG BOARD SWITCHES")
             print("Call .set_plug_board() to try again.")
