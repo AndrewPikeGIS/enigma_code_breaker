@@ -17,9 +17,9 @@ class Victory(EnigmaMachine):
 
         self.rotor1_seed = 1
 
-        self.rotor2_seed = 1
+        self.rotor2_seed = 2
 
-        self.rotor3_seed = 1
+        self.rotor3_seed = 3
 
         self.rotor1_start = 0
 
@@ -29,17 +29,29 @@ class Victory(EnigmaMachine):
 
         self.reflector_seed = 0
 
+        # self.plug_board = {
+        #     "a": "b",
+        #     "c": "d",
+        #     "e": "f",
+        #     "g": "h",
+        #     "i": "j",
+        #     "k": "l",
+        #     "m": "n",
+        #     "o": "p",
+        #     "q": "r",
+        #     "s": "t"}
+
         self.plug_board = {
-            "a": "b",
-            "c": "d",
-            "e": "f",
-            "g": "h",
-            "i": "j",
-            "k": "l",
-            "m": "n",
-            "o": "p",
-            "q": "r",
-            "s": "t"}
+            "a": "j",
+            "b": "d",
+            "c": "p",
+            "e": "y",
+            "f": "t",
+            "g": "k",
+            "h": "l",
+            "i": "u",
+            "m": "w",
+            "o": "r"}
 
         self.score_table = pd.read_csv(r"data/decrypt_score.csv")
 
@@ -233,4 +245,4 @@ VictoryTest.set_known_value(
     "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
 
 
-VictoryTest.check_enigma_settings(20000)
+VictoryTest.check_enigma_settings(200000)
