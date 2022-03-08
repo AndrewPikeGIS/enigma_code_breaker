@@ -205,16 +205,19 @@ class Victory(EnigmaMachine):
 
             percentage = (x/number_of_iterations)*100
 
-            if percentage >= 25.0 and print_count == 0:
+            if percentage >= 10.0 and print_count == 0:
+                print("10% complete")
+                print_count += 1
+            elif percentage >= 25.0 and print_count == 1:
                 print("25% complete")
                 print_count += 1
-            elif percentage >= 50 and print_count == 1:
+            elif percentage >= 50 and print_count == 2:
                 print("50% complete")
                 print_count += 1
-            elif percentage >= 75 and print_count == 2:
+            elif percentage >= 75 and print_count == 3:
                 print("75% complete")
                 print_count += 1
-            elif percentage >= 99.0 and print_count == 3:
+            elif percentage >= 99.0 and print_count == 4:
                 print("99% complete")
                 print_count += 1
 
@@ -241,4 +244,4 @@ VictoryTest.set_known_value(
     "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
 
 
-VictoryTest.check_enigma_settings(200000)
+VictoryTest.check_enigma_settings(2000000)
