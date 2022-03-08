@@ -115,7 +115,7 @@ class EnigmaRotor:
 
 
 class EnigmaMachine:
-    def __init__(self, plug_board, rotor1_seed=1, rotor1_start=1, rotor2_seed=2, rotor2_start=1, rotor3_seed=3, rotor3_start=1, reflector_seed=10):
+    def __init__(self, plugboard_seed=10, rotor1_seed=1, rotor1_start=1, rotor2_seed=2, rotor2_start=1, rotor3_seed=3, rotor3_start=1, reflector_seed=10):
 
         self.rotor1_seed = rotor1_seed
 
@@ -133,9 +133,9 @@ class EnigmaMachine:
 
         self.reflector = {}
 
-        self.plug_board_pairs = {}
+        self.plug_board = {}
 
-        self.plug_board = plug_board
+        self.plugboard_seed = plugboard_seed
 
         self.encrypted_string = ""
 
@@ -143,7 +143,7 @@ class EnigmaMachine:
 
         self.string_in = ""
 
-        self.set_plug_board()
+        self.build_plug_board()
 
         self.build_reflector()
 
@@ -184,20 +184,38 @@ class EnigmaMachine:
 
         self.reflector = dict(zip(keys, values))
 
-    def set_plug_board(self):
+    def build_plug_board(self):
 
-        if len(self.plug_board.keys()) <= 10:
-            self.plug_board_pairs = self.plug_board
-        else:
-            print("MAXIMUM 10 PLUG BOARD SWITCHES")
-            print("Call .set_plug_board() to try again.")
+        keys = []
+        values = []
+
+        pair = string.ascii_lowercase
+
+        # starting case reflector seed between 0 -100
+        if self.reflector_seed > 100:
+            self.reflector_seed = 100
+        elif self.reflector_seed < 0:
+            self.reflector_seed = 0
+
+        random.seed(self.plugboard_seed)
+
+        for x in range(10):
+            keys.append(pair[0])
+            pair = pair.replace(pair[0], "")
+            for val in values:
+                pair = pair.replace(val, "")
+            val_add = pair[random.randint(0, len(pair)-1)]
+            values.append(val_add)
+            pair = pair.replace(val_add, "")
+
+        self.plug_board = dict(zip(keys, values))
 
     def encrypt_char_plugboard(self, string_in):
-        if string_in in self.plug_board_pairs.keys():
-            string_out = self.plug_board_pairs[string_in]
-        elif string_in in self.plug_board_pairs.values():
-            vals = list(self.plug_board_pairs.values())
-            string_out = list(self.plug_board_pairs.keys())[
+        if string_in in self.plug_board.keys():
+            string_out = self.plug_board[string_in]
+        elif string_in in self.plug_board.values():
+            vals = list(self.plug_board.values())
+            string_out = list(self.plug_board.keys())[
                 vals.index(string_in)
             ]
         else:

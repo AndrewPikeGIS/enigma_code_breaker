@@ -41,23 +41,13 @@ class Victory(EnigmaMachine):
         #     "q": "r",
         #     "s": "t"}
 
-        self.plug_board = {
-            "a": "j",
-            "b": "d",
-            "c": "p",
-            "e": "y",
-            "f": "t",
-            "g": "k",
-            "h": "l",
-            "i": "u",
-            "m": "w",
-            "o": "r"}
+        self.plugboard_seed = 0
 
         self.score_table = pd.read_csv(r"data/decrypt_score.csv")
 
         self.build_reflector()
 
-        self.set_plug_board()
+        self.build_plug_board()
 
         self.build_rotors()
 
@@ -80,6 +70,11 @@ class Victory(EnigmaMachine):
 
     def check_output_on_known_val(self):
         # check the decrypted string against the known value string and give a score
+        known_string = self.known_value
+        for val in known_string[:]:
+            if val.lower() not in ascii_lowercase:
+                known_string.replace(val, "")
+        length_known_inputs = len(known_string)
         self.matched_values = ""
         if self.decrypted_string != "" and self.known_value != "":
 
@@ -91,19 +86,16 @@ class Victory(EnigmaMachine):
             # update this so that only non space values are checked.
             for x in range(len(known_string)):
                 if decrypted_string[x] in ascii_lowercase:
-                    if decrypted_string[x] != " ":
-                        if known_string[x] == decrypted_string[x]:
-                            counter += 1
-                            self.matched_values += known_string[x]
-                        else:
-                            self.matched_values += " "
+                    if known_string[x].lower() == decrypted_string[x]:
+                        counter += 1
+                        self.matched_values += known_string[x]
                     else:
                         self.matched_values += " "
                 else:
                     self.matched_values += decrypted_string[x]
 
             self.decrypt_score = (
-                counter/len(known_string.replace(" ", ""))) * 100
+                counter/length_known_inputs) * 100
         elif self.known_value != "":
             print("Missing decrypted value. Please run decrypt_string() first.")
         elif self.known_value == "":
@@ -137,8 +129,11 @@ class Victory(EnigmaMachine):
         return("Done")
 
     def iterate_on_plugboard(self):
-        # iterate the plugboard
-        return("Done")
+        if self.plugboard_seed != 100:
+            self.plugboard_seed += 1
+            self.build_plug_board()
+        else:
+            return("Done")
 
     def iterate_on_reflector(self):
         # iterate on reflector
@@ -151,7 +146,7 @@ class Victory(EnigmaMachine):
     def store_decrypt_score(self, run_number):
         new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor_1.rotor_seed], "rotor2_seed": [self.rotor_2.rotor_seed], "rotor3_seed": [self.rotor_3.rotor_seed],
                                        "rotor1_start": [self.rotor1_start], "rotor2_start": [self.rotor2_start], "rotor3_start": [self.rotor3_start],
-                                       "reflector": [self.reflector], "plugboard": [self.plug_board_pairs], "score": [self.decrypt_score], "known_value": [self.known_value],
+                                       "reflector": [self.reflector], "plugboard": [self.plug_board], "score": [self.decrypt_score], "known_value": [self.known_value],
                                        "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values], "encrypted_message": [self.encrypted_string], "reflector_seed": [self.reflector_seed]})
 
         concat_df = pd.concat([self.score_table, new_score], ignore_index=True)
@@ -159,6 +154,7 @@ class Victory(EnigmaMachine):
         self.score_table = concat_df
 
     def write_score_table(self):
+        # update to only include scores above 50%?
         self.score_table.to_excel(
             "output/decrypt_score_" + str(self.number_of_iterations) + "_" + str(dt.date.today()) + ".xlsx")
 
