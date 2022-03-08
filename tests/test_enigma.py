@@ -5,30 +5,16 @@ from string import ascii_lowercase
 
 import enigma_code_breaker.enigma_code.enigma_cypher_machine as enigma
 
-plugboard_test = {
-    "a": "j",
-    "b": "d",
-    "c": "p",
-    "e": "y",
-    "f": "t",
-    "g": "k",
-    "h": "l",
-    "i": "u",
-    "m": "w",
-    "o": "r",
-}
 
 test_enigma = enigma.EnigmaMachine(
-    plug_board=plugboard_test, rotor1_start=1, rotor2_start=1, rotor3_start=1)
+    plugboard_seed=10, rotor1_start=1, rotor2_start=1, rotor3_start=1)
 
 # test that values in plug board match input dct.
 
 
 def test_plugboard():
 
-    assert "f" in test_enigma.plug_board_pairs.keys()
-    assert "j" not in test_enigma.plug_board_pairs.keys()
-    assert "j" in test_enigma.plug_board_pairs.values()
+    assert len(test_enigma.plug_board.keys()) == 10
 
 
 def test_plugboard_in_same_as_reverse():
@@ -60,8 +46,8 @@ def test_plugboard_in_same_as_reverse():
 
 
 def test_no_duplicated_values_in_plugboard():
-    plugboard_keys = list(test_enigma.plug_board_pairs.keys())
-    plugboard_values = list(test_enigma.plug_board_pairs.values())
+    plugboard_keys = list(test_enigma.plug_board.keys())
+    plugboard_values = list(test_enigma.plug_board.values())
 
     assert len(set(plugboard_keys) & set(plugboard_values)) == 0
 
