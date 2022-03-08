@@ -1,4 +1,3 @@
-from cgi import print_environ, test
 import enigma_code.enigma_cypher_machine as enigma
 
 
@@ -20,5 +19,3 @@ test_enigma.write_encrypted_string_to_text(r"encrypted_commands", "command1")
 test_enigma.decrypt_string(2, 3, 1)
 
 test_enigma.print_decrypted_string()
-
-print(test_enigma.plug_board)
