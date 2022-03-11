@@ -51,6 +51,8 @@ class Victory(EnigmaMachine):
 
         self.rotor_seed_status = 0
 
+        self.decrypt_score = 0
+
         self.score_table = pd.read_csv(r"data/decrypt_score.csv")
 
         self.build_reflector()
@@ -126,6 +128,7 @@ class Victory(EnigmaMachine):
                     self.rotor2_start = 0
                     self.rotor3_start = 0
                     return_val = "Done"
+                    print("All rotor start positons checked")
         self.rotor_1.position = self.rotor1_start
         self.rotor_2.position = self.rotor2_start
         self.rotor_3.position = self.rotor3_start
@@ -142,6 +145,7 @@ class Victory(EnigmaMachine):
             self.plugboard_seed += 1
             self.build_plug_board()
         else:
+            self.plugboard_seed = 0
             print("All plugboard combinations checked")
             return("Done")
 
@@ -151,6 +155,7 @@ class Victory(EnigmaMachine):
             self.reflector_seed += 1
             self.build_reflector()
         else:
+            self.reflector_seed = 0
             print("All reflector combinations checked")
             return("Done")
 
@@ -169,7 +174,7 @@ class Victory(EnigmaMachine):
     def write_score_table(self):
         # update to only include scores above 50%?
         self.score_table.to_excel(
-            "output/decrypt_score_" + str(self.number_of_iterations) + "_" + str(dt.date.today()) + ".xlsx")
+            "output/decrypt_score_" + str(dt.date.today()) + ".xlsx")
 
     def hours_minutes_seconds(self, timedelta):
         days = timedelta.days
@@ -179,78 +184,73 @@ class Victory(EnigmaMachine):
         print("Time elapsed days:", days, "hours:",
               hours, "minutes:", minutes, "\n")
 
-    def check_rotor_start_positions(self):
-        iterate_start_return = ""
-        print("Checking rotor start positions")
-        while iterate_start_return != "Done" or self.decrypt_score < 100:
+    def print_percentage(self, run_count, number_of_iterations, current_status):
+        percentage = (run_count/number_of_iterations)*100
+
+        if percentage >= 25.0 and current_status == 0:
+            print("25% complete")
+            current_status += 25
+        elif percentage >= 50.0 and current_status == 25:
+            print("50% complete")
+            current_status += 25
+        elif percentage >= 75.0 and current_status == 50:
+            print("75% complete")
+            current_status += 25
+        elif percentage >= 99.0 and current_status == 75:
+            print("99% complete")
+            current_status += 25
+
+        return(current_status)
+
+    def check_enigma_settings(self):
+        time_start = dt.datetime.now()
+        iterate_plug_return = ""
+        iterate_reflector_return = ""
+        iterate_seed_return = ""
+        int_counter = 0
+        current_status = 0
+        number_of_iterations = 26**3
+        # check rotor positions for initial plugboard, reflector and seed options.
+        print("Checking rotor starting positions for plugboard seed:" +
+              str(self.plugboard_seed) + " and reflector: " + str(self.reflector_seed))
+        while self.decrypt_score < 100:
+            int_counter += 1
             self.decrypt_string()
 
             # check decrypted text with known val
             self.check_output_on_known_val()
 
-            if self.decrypt_score == 100.0:
-                break
             # store the decrypted values in the score dataframe
-            self.store_decrypt_score(x)
+            self.store_decrypt_score(int_counter)
 
             # iterate on start position
             iterate_start_return = self.interate_on_starting_positions()
 
-    def print_percentage(self, run_count, number_of_iterations, current_status):
-        percentage = (run_count/number_of_iterations)*100
+            if iterate_start_return == "Done":
 
-        if percentage >= 10.0 and current_status == 0:
-            print("10% complete")
-            current_status += 10
-        elif percentage >= 20.0 and current_status == 10:
-            print("20% complete")
-            current_status += 10
-        elif percentage >= 30.0 and current_status == 20:
-            print("30% complete")
-            current_status += 10
-        elif percentage >= 40.0 and current_status == 30:
-            print("40% complete")
-            current_status += 10
-        elif percentage >= 50.0 and current_status == 40:
-            print("50% complete")
-            current_status += 10
-        elif percentage >= 60.0 and current_status == 50:
-            print("60% complete")
-            current_status += 10
-        elif percentage >= 70.0 and current_status == 60:
-            print("70% complete")
-            current_status += 10
-        elif percentage >= 80.0 and current_status == 70:
-            print("80% complete")
-            current_status += 10
-        elif percentage >= 90.0 and current_status == 80:
-            print("90% complete")
-            current_status += 10
-        elif percentage >= 99.0 and current_status == 90:
-            print("99% complete")
-            current_status += 10
+                iterate_plug_return = self.iterate_on_plugboard()
 
-    def check_enigma_settings(self, number_of_iterations):
-        time_start = dt.datetime.now()
-        self.number_of_iterations = number_of_iterations
-        # this may need to be changed to a while loop...
-        while self.decrypt_score < 100:
-            # decrypt the text
+                print("Checking rotor starting positions for plugboard seed:" +
+                      str(self.plugboard_seed) + " and reflector: " + str(self.reflector_seed))
 
-            iterate_plug_return = self.iterate_on_plugboard()
+                int_counter = 0
+                current_status = 0
 
-            if iterate_plug_return == "Done":
-                # iterate on reflector
-                iterate_reflector_return = self.iterate_on_reflector()
+                if iterate_plug_return == "Done":
+                    # iterate on reflector
+                    iterate_reflector_return = self.iterate_on_reflector()
 
-                if iterate_reflector_return == "Done":
-                    # iterate on rotor seed
-                    iterate_seed_return = self.iterate_on_rotor_seed()
+                    if iterate_reflector_return == "Done":
+                        # iterate on rotor seed
+                        iterate_seed_return = self.iterate_on_rotor_seed()
 
-                    if iterate_seed_return == "Done":
-                        # all combinations checked.
-                        print("All combinations checked\n")
-                        break
+                        if iterate_seed_return == "Done":
+                            # all combinations checked.
+                            print("All combinations checked\n")
+                            break
+
+            current_status = self.print_percentage(
+                int_counter, number_of_iterations, current_status)
 
         # store score in table
         self.write_score_table()
@@ -275,4 +275,4 @@ VictoryTest.set_known_value(
     "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
 
 
-VictoryTest.check_enigma_settings(2000000)
+VictoryTest.check_enigma_settings()
