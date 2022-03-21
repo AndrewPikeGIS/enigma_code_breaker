@@ -81,22 +81,20 @@ class Victory(EnigmaMachine):
     def check_output_on_known_val(self):
         # check the decrypted string against the known value string and give a score
         known_string = self.known_value
-        for val in known_string[:]:
-            if val.lower() not in ascii_lowercase:
-                known_string.replace(val, "")
-        length_known_inputs = len(known_string)
-        self.matched_values = ""
-        if self.decrypted_string != "" and self.known_value != "":
+        known_string = known_string.lower()
 
-            known_string = self.known_value
+        length_known_inputs = len(
+            known_string.replace(" ", "").replace("\n", "").replace(".", "").replace(",", "").replace("!", ""))
+        self.matched_values = ""
+        if self.decrypted_string != "" and known_string != "":
 
             decrypted_string = self.decrypted_string
 
             counter = 0
-            # update this so that only non space values are checked.
+
             for x in range(len(known_string)):
                 if decrypted_string[x] in ascii_lowercase:
-                    if known_string[x].lower() == decrypted_string[x]:
+                    if known_string[x] == decrypted_string[x]:
                         counter += 1
                         self.matched_values += known_string[x]
                     else:
@@ -105,7 +103,7 @@ class Victory(EnigmaMachine):
                     self.matched_values += decrypted_string[x]
 
             self.decrypt_score = (
-                counter/length_known_inputs) * 100
+                counter/length_known_inputs) * 100.0
         elif self.known_value != "":
             print("Missing decrypted value. Please run decrypt_string() first.")
         elif self.known_value == "":
@@ -141,7 +139,8 @@ class Victory(EnigmaMachine):
         return("Done")
 
     def iterate_on_plugboard(self):
-        if self.plugboard_seed != 100:
+        # iterate on plugboard
+        if self.plugboard_seed != 50:
             self.plugboard_seed += 1
             self.build_plug_board()
         else:
@@ -151,7 +150,7 @@ class Victory(EnigmaMachine):
 
     def iterate_on_reflector(self):
         # iterate on reflector
-        if self.reflector_seed != 100:
+        if self.reflector_seed != 50:
             self.reflector_seed += 1
             self.build_reflector()
         else:
@@ -160,11 +159,12 @@ class Victory(EnigmaMachine):
             return("Done")
 
     def store_decrypt_score(self, run_number):
-        if self.decrypt_score > 10:
+        if self.decrypt_score >= 25.0:
             new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor_1.rotor_seed], "rotor2_seed": [self.rotor_2.rotor_seed], "rotor3_seed": [self.rotor_3.rotor_seed],
                                            "rotor1_start": [self.rotor1_start], "rotor2_start": [self.rotor2_start], "rotor3_start": [self.rotor3_start],
                                            "reflector": [self.reflector], "plugboard": [self.plug_board], "score": [self.decrypt_score], "known_value": [self.known_value],
-                                           "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values], "encrypted_message": [self.encrypted_string], "reflector_seed": [self.reflector_seed]})
+                                           "decrypted_message": [self.decrypted_string], "matched_values": [self.matched_values], "encrypted_message": [self.encrypted_string],
+                                           "reflector_seed": [self.reflector_seed], "plugboard_seed": [self.plugboard_seed]})
 
             concat_df = pd.concat(
                 [self.score_table, new_score], ignore_index=True)
@@ -208,12 +208,14 @@ class Victory(EnigmaMachine):
         iterate_reflector_return = ""
         iterate_seed_return = ""
         int_counter = 0
+        total_iterations = 0
         current_status = 0
         number_of_iterations = 26**3
         # check rotor positions for initial plugboard, reflector and seed options.
         print("Checking rotor starting positions for plugboard seed:" +
               str(self.plugboard_seed) + " and reflector: " + str(self.reflector_seed))
-        while self.decrypt_score < 100:
+        while self.decrypt_score < 100.0:
+            total_iterations += 1
             int_counter += 1
             self.decrypt_string()
 
@@ -221,7 +223,7 @@ class Victory(EnigmaMachine):
             self.check_output_on_known_val()
 
             # store the decrypted values in the score dataframe
-            self.store_decrypt_score(int_counter)
+            self.store_decrypt_score(total_iterations)
 
             # iterate on start position
             iterate_start_return = self.interate_on_starting_positions()
@@ -229,9 +231,6 @@ class Victory(EnigmaMachine):
             if iterate_start_return == "Done":
 
                 iterate_plug_return = self.iterate_on_plugboard()
-
-                print("Checking rotor starting positions for plugboard seed:" +
-                      str(self.plugboard_seed) + " and reflector: " + str(self.reflector_seed))
 
                 int_counter = 0
                 current_status = 0
@@ -249,6 +248,9 @@ class Victory(EnigmaMachine):
                             print("All combinations checked\n")
                             break
 
+                print("Checked rotor starting positions for plugboard seed:" +
+                      str(self.plugboard_seed) + " and reflector: " + str(self.reflector_seed))
+
             current_status = self.print_percentage(
                 int_counter, number_of_iterations, current_status)
 
@@ -262,7 +264,7 @@ class Victory(EnigmaMachine):
         delta_time = dt.datetime.now()-time_start
         self.hours_minutes_seconds(delta_time)
         print("Time per iteration:")
-        print(delta_time/number_of_iterations)
+        print(delta_time/total_iterations)
 
 
 VictoryTest = Victory()
