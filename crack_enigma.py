@@ -148,6 +148,9 @@ class Victory(EnigmaMachine):
             print("All plugboard combinations checked")
             return("Done")
 
+    def intelligent_iterate_on_plugboard(self):
+        pass
+
     def brute_force_iterate_on_reflector(self):
         # iterate on reflector
         if self.reflector_seed != 10:
