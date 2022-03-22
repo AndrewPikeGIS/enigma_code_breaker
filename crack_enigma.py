@@ -110,7 +110,7 @@ class Victory(EnigmaMachine):
             print(
                 "Known values missing. Please add known value with set_known_value() first.")
 
-    def interate_on_starting_positions(self):
+    def brute_force_interate_on_starting_positions(self):
         # iterate the enigma starting positions
 
         return_val = ""
@@ -133,12 +133,12 @@ class Victory(EnigmaMachine):
 
         return(return_val)
 
-    def iterate_on_rotor_seed(self):
+    def brute_force_iterate_on_rotor_seed(self):
         # iterate the enigma seeds
         print("All rotor seeds checked")
         return("Done")
 
-    def iterate_on_plugboard(self):
+    def brute_force_iterate_on_plugboard(self):
         # iterate on plugboard
         if self.plugboard_seed != 10:
             self.plugboard_seed += 1
@@ -148,7 +148,7 @@ class Victory(EnigmaMachine):
             print("All plugboard combinations checked")
             return("Done")
 
-    def iterate_on_reflector(self):
+    def brute_force_iterate_on_reflector(self):
         # iterate on reflector
         if self.reflector_seed != 10:
             self.reflector_seed += 1
@@ -227,22 +227,22 @@ class Victory(EnigmaMachine):
             self.store_decrypt_score(total_iterations)
 
             # iterate on start position
-            iterate_start_return = self.interate_on_starting_positions()
+            iterate_start_return = self.brute_force_interate_on_starting_positions()
 
             if iterate_start_return == "Done":
 
-                iterate_plug_return = self.iterate_on_plugboard()
+                iterate_plug_return = self.brute_force_iterate_on_plugboard()
 
                 int_counter = 0
                 current_status = 0
 
                 if iterate_plug_return == "Done":
                     # iterate on reflector
-                    iterate_reflector_return = self.iterate_on_reflector()
+                    iterate_reflector_return = self.brute_force_iterate_on_reflector()
 
                     if iterate_reflector_return == "Done":
                         # iterate on rotor seed
-                        iterate_seed_return = self.iterate_on_rotor_seed()
+                        iterate_seed_return = self.brute_force_iterate_on_rotor_seed()
 
                         if iterate_seed_return == "Done":
                             # all combinations checked.
