@@ -148,8 +148,27 @@ class Victory(EnigmaMachine):
             print("All plugboard combinations checked")
             return("Done")
 
+    def rank_best_plugboards(self):
+        dfscores = self.score_table
+
+        dfscores = dfscores.sort_values(by=['score'])
+
+        dfscores = dfscores.head(20)
+
+        list_plugboard_seeds = dfscores['plugboard_seed'].unique()
+
+        return(list_plugboard_seeds)
+
     def intelligent_iterate_on_plugboard(self):
-        pass
+        # plug board is a weak point in the design and can be exploited by limiting the plugboard seeds that are checked to ones with the highest score amongst a large enough sample set.
+        # iterate on plugboard
+        if self.plugboard_seed == 0:
+            self.plugboard_seed += 1
+            self.build_plug_board()
+        else:
+            self.plugboard_seed = 0
+            print("All plugboard combinations checked")
+            return("Done")
 
     def brute_force_iterate_on_reflector(self):
         # iterate on reflector
