@@ -140,7 +140,7 @@ class Victory(EnigmaMachine):
 
     def iterate_on_plugboard(self):
         # iterate on plugboard
-        if self.plugboard_seed != 50:
+        if self.plugboard_seed != 10:
             self.plugboard_seed += 1
             self.build_plug_board()
         else:
@@ -150,7 +150,7 @@ class Victory(EnigmaMachine):
 
     def iterate_on_reflector(self):
         # iterate on reflector
-        if self.reflector_seed != 50:
+        if self.reflector_seed != 10:
             self.reflector_seed += 1
             self.build_reflector()
         else:
@@ -159,7 +159,7 @@ class Victory(EnigmaMachine):
             return("Done")
 
     def store_decrypt_score(self, run_number):
-        if self.decrypt_score >= 25.0:
+        if self.decrypt_score >= 0:
             new_score = pd.DataFrame(data={"run": [run_number], "rotor1_seed": [self.rotor_1.rotor_seed], "rotor2_seed": [self.rotor_2.rotor_seed], "rotor3_seed": [self.rotor_3.rotor_seed],
                                            "rotor1_start": [self.rotor1_start], "rotor2_start": [self.rotor2_start], "rotor3_start": [self.rotor3_start],
                                            "reflector": [self.reflector], "plugboard": [self.plug_board], "score": [self.decrypt_score], "known_value": [self.known_value],
@@ -202,6 +202,7 @@ class Victory(EnigmaMachine):
 
         return(current_status)
 
+    # brute force algorithm for breaking the code
     def check_enigma_settings(self):
         time_start = dt.datetime.now()
         iterate_plug_return = ""
