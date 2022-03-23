@@ -53,6 +53,8 @@ class Victory(EnigmaMachine):
 
         self.decrypt_score = 0
 
+        self.refined_plugboard_seed_list = []
+
         self.score_table = pd.read_csv(r"data/decrypt_score.csv")
 
         self.build_reflector()
@@ -148,18 +150,47 @@ class Victory(EnigmaMachine):
             print("All plugboard combinations checked")
             return("Done")
 
-    def rank_best_plugboards(self):
-        dfscores = self.score_table
+    def rank_best_plugboards(self, dfscores):
 
-        dfscores = dfscores.sort_values(by=['score'])
+        dfscores = dfscores.sort_values(by=['score'], ascending=False)
 
         dfscores = dfscores.head(20)
 
         list_plugboard_seeds = dfscores['plugboard_seed'].unique()
 
+        list_plugboard_seeds.sort()
+
         return(list_plugboard_seeds)
 
-    def intelligent_iterate_on_plugboard(self):
+    def intelligent_iterate_on_plugboard(self, total_iterations):
+        if total_iterations < 26**3:
+            if self.plugboard_seed != 10:
+                self.plugboard_seed += 1
+                self.build_plug_board()
+            else:
+                self.plugboard_seed = 0
+                print("All plugboard combinations checked")
+                return("Done")
+        else:
+            if len(self.refined_plugboard_seed_list) == 0:
+                self.refined_plugboard_seed_list = self.rank_best_plugboards(
+                    self.score_table)
+                self.current_positon_in_refined_plug_list = 0
+                self.plugboard_seed = self.refined_plugboard_seed_list[
+                    self.current_positon_in_refined_plug_list]
+                self.build_plug_board()
+            elif (len(self.refined_plugboard_seed_list)-1) <= self.current_positon_in_refined_plug_list:
+                self.current_positon_in_refined_plug_list += 1
+                self.plugboard_seed = self.refined_plugboard_seed_list[
+                    self.current_positon_in_refined_plug_list]
+                self.build_plug_board()
+            else:
+                self.current_positon_in_refined_plug_list = 0
+                self.plugboard_seed = self.refined_plugboard_seed_list[
+                    self.current_positon_in_refined_plug_list]
+                print("All plugboard combinations checked")
+                return("Done")
+
         # plug board is a weak point in the design and can be exploited by limiting the plugboard seeds that are checked to ones with the highest score amongst a large enough sample set.
         # iterate on plugboard
 
@@ -287,14 +318,14 @@ class Victory(EnigmaMachine):
         print(delta_time/total_iterations)
 
 
-VictoryTest = Victory()
+#VictoryTest = Victory()
 
-VictoryTest.read_encrypted_text(r"encrypted_commands/command1.txt")
+# VictoryTest.read_encrypted_text(r"encrypted_commands/command1.txt")
 
-VictoryTest.set_known_value("Good Morning,\n\nWeather today", 0)
+#VictoryTest.set_known_value("Good Morning,\n\nWeather today", 0)
 
-VictoryTest.set_known_value(
-    "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
+# VictoryTest.set_known_value(
+#    "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
 
 
-VictoryTest.check_enigma_settings()
+# VictoryTest.check_enigma_settings()

@@ -1,4 +1,3 @@
-from cgi import test
 import pytest
 import os
 from string import ascii_lowercase
