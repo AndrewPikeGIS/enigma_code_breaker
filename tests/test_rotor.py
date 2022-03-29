@@ -1,5 +1,3 @@
-from pickle import TRUE
-from re import I
 from string import ascii_lowercase
 import pytest
 

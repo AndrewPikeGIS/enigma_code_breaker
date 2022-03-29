@@ -1,5 +1,5 @@
 
-from crack_enigma import Victory
+from enigma_cypher_machine import Victory
 
 VictoryTest = Victory()
 

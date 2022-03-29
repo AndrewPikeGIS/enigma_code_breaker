@@ -1,8 +1,8 @@
 import pytest
-
 import pandas as pd
 
-import enigma_code_breaker.crack_enigma as crack_enigma
+#import enigma_code_breaker.enigma_code.crack_enigma as crack_enigma
+#from enigma_code.crack_enigma import Victory
 import enigma_code_breaker.enigma_code.enigma_cypher_machine as enigma
 
 
@@ -12,6 +12,6 @@ def test_rank_best_plugboards():
         'plugboard_seed': [1, 1, 1, 1, 2, 10, 2, 2, 3, 4, 4, 5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
     })
 
-    refined_plug_seed_list = crack_enigma.rank_best_plugboards(pd_test)
+    refined_plug_seed_list = enigma.Victory.rank_best_plugboards(pd_test)
 
     assert refined_plug_seed_list == [1, 2, 3, 4, 5, 10]
