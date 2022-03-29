@@ -1,4 +1,4 @@
-import enigma_code.enigma_cypher_machine as enigma
+import enigma_cypher_machine as enigma
 
 
 test_enigma = enigma.EnigmaMachine(

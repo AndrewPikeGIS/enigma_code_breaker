@@ -1,7 +1,7 @@
 
 from string import ascii_lowercase
 import pandas as pd
-from enigma_code.enigma_cypher_machine import EnigmaMachine
+from enigma_cypher_machine import EnigmaMachine
 import datetime as dt
 
 
@@ -318,14 +318,14 @@ class Victory(EnigmaMachine):
         print(delta_time/total_iterations)
 
 
-#VictoryTest = Victory()
+VictoryTest = Victory()
 
-# VictoryTest.read_encrypted_text(r"encrypted_commands/command1.txt")
+VictoryTest.read_encrypted_text(r"encrypted_commands/command1.txt")
 
-#VictoryTest.set_known_value("Good Morning,\n\nWeather today", 0)
+VictoryTest.set_known_value("Good Morning,\n\nWeather today", 0)
 
-# VictoryTest.set_known_value(
-#    "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
+VictoryTest.set_known_value(
+    "Hail Hitler.", len(VictoryTest.encrypted_string)-12)
 
 
-# VictoryTest.check_enigma_settings()
+VictoryTest.check_enigma_settings()
