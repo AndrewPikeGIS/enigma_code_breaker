@@ -541,7 +541,7 @@ class Victory(EnigmaMachine):
             print("All plugboard combinations checked")
             return("Done")
 
-    def rank_best_plugboards(self, dfscores):
+    def rank_best_plugboards(dfscores):
 
         dfscores = dfscores.sort_values(by=['score'], ascending=False)
 
